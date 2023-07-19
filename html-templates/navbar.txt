@@ -1,39 +1,37 @@
-<header>
-      <div class="logo-nav">
-          <img src="https://nouhi.dev/assets/logo.png" alt="">
-      </div>
-      <input type="checkbox" id="nav_check" hidden>
-      <nav>
-          <div class="logo">
-              <img src="https://nouhi.dev/assets/logo.png" alt="">
-          </div>
-          <ul>
-            <li>
-                <a href="https://nouhi.dev/" class="active">Home</a>
-            </li>
-            <li>
-                <a href="https://nouhi.dev/games/">Games</a>
-            </li>
-            <li>
-                <a href="https://nouhi.dev/simulations/">Simulations</a>
-            </li>
-            <li>
-              <a href="https://nouhi.dev/projects/">Projects</a>
-          </li>
-            <li>
-                <a href="https://nouhi.dev/other-projects/">Other</a>
-            </li>
-            <li>
-              <a href="https://nouhi.dev/contact/">Contact</a>
-          </li>
-          <li>
-            <a href="https://nouhi.dev/ndev-api-docs/" class="api-item">NDev API</a>
+    <div class="logo-nav">
+        <img src="https://nouhi.dev/assets/logo.png" alt="">
+    </div>
+    <input type="checkbox" id="nav_check" hidden>
+    <nav>
+        <div class="logo">
+            <img src="https://nouhi.dev/assets/logo.png" alt="">
+        </div>
+        <ul>
+        <li>
+            <a href="https://nouhi.dev/" class="active">Home</a>
         </li>
-        </ul>
-      </nav>
-      <label for="nav_check" class="hamburger">
-          <div class="line"></div>
-          <div class="line"></div>
-          <div class="line"></div>
-      </label>
-  </header>
+        <li>
+            <a href="https://nouhi.dev/games/">Games</a>
+        </li>
+        <li>
+            <a href="https://nouhi.dev/simulations/">Simulations</a>
+        </li>
+        <li>
+            <a href="https://nouhi.dev/projects/">Projects</a>
+        </li>
+        <li>
+            <a href="https://nouhi.dev/other-projects/">Other</a>
+        </li>
+        <li>
+            <a href="https://nouhi.dev/contact/">Contact</a>
+        </li>
+        <li>
+        <a href="https://nouhi.dev/ndev-api-docs/" class="api-item">NDev API</a>
+    </li>
+    </ul>
+    </nav>
+    <label for="nav_check" class="hamburger">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </label>
