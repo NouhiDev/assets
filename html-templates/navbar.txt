@@ -26,7 +26,7 @@
             <a href="https://nouhi.dev/contact/">Contact</a>
         </li>
         <li>
-        <a href="https://nouhi.dev/ndev-api-docs/" class="api-item">NDev API</a>
+        <a href="https://nouhi.dev/ndev-api-docs/" style="background-color: var(--primary-color);">NDev API</a>
     </li>
     </ul>
     </nav>
