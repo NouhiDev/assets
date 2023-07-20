@@ -5,10 +5,13 @@
 // Global JavaScript for all sites on nouhi.dev
 
 // ! Requires jQuery ! (https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js)
+// ! Requires ndev-site.js to function correctly ! (https://nouhi.dev/assets/global-scripts/ndev-site.js)
 
 const NAV_URL = "https://nouhi.dev/assets/html-templates/navbar.txt";
 
 $(window).on("load", async function () {
+    setUpLoader();
+
     $(".loader").fadeOut(1000);
     delay(1000).then(() => {
         $(".content").fadeIn(1000)
@@ -32,4 +35,16 @@ async function setUpNavBar() {
     } catch (error) {
         console.error("Could not set up the navbar!", error);
     }
+}
+
+async function setUpLoader() {
+    const loaderHTML = `
+        <div class="loader">
+        <div class="cube">
+            ${Array.from({ length: 6 }, () => '<div class="side"></div>').join('')}
+        </div>
+        </div>
+    `;
+
+    $('body').append(loaderHTML);
 }
