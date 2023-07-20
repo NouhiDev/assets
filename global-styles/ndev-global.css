@@ -293,6 +293,7 @@ nav ul li a:hover {
     color: #fff;
     text-align: center;
     transition: transform 0.2s;
+    font-size: 70px;
 }
 
 .title-split {
