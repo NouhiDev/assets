@@ -317,7 +317,7 @@ nav ul li a:hover {
     color: var(--primary-color);
     transition: transform 0.2s;
     max-width: 200px;
-    border-width: 0.020833333in;
+    border-width: 1px;
     border-style: solid;
     border-image: none;
     font-size: 15pt;
