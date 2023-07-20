@@ -10,6 +10,8 @@
 const NAV_URL = "https://nouhi.dev/assets/html-templates/navbar.txt";
 
 $(window).on("load", async function () {
+    usageDisplay();
+
     setUpLoader();
 
     $(".loader").fadeOut(1000);
@@ -47,4 +49,10 @@ async function setUpLoader() {
     `;
 
     $('body').append(loaderHTML);
+}
+
+async function usageDisplay() {
+    console.log("░█▄─░█ ░█▀▀▄ ░█▀▀▀ ░█──░█ 　 ░█▀▀█ ░█─── ░█▀▀▀█ ░█▀▀█ ─█▀▀█ ░█─── 　 ───░█ ░█▀▀▀█ ");
+    console.log("░█░█░█ ░█─░█ ░█▀▀▀ ─░█░█─ 　 ░█─▄▄ ░█─── ░█──░█ ░█▀▀▄ ░█▄▄█ ░█─── 　 ─▄─░█ ─▀▀▀▄▄ ");
+    console.log("░█──▀█ ░█▄▄▀ ░█▄▄▄ ──▀▄▀─ 　 ░█▄▄█ ░█▄▄█ ░█▄▄▄█ ░█▄▄█ ░█─░█ ░█▄▄█ 　 ░█▄▄█ ░█▄▄▄█");
 }
