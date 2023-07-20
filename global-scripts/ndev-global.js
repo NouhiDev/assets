@@ -26,6 +26,7 @@ function delay(time) {
 
 async function setUpNavBar() {
     if (!document.getElementsByTagName("header")[0]) {
+        console.log("No header present in the document's body. Creating one now...")
         var header = document.createElement("header");
         document.body.appendChild(header);
     }
