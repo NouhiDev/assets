@@ -303,6 +303,7 @@ nav ul li a:hover {
 .btn {
     text-align: center;
     border-color: var(--primary-color);
+    background-color: var(--main-bg-color);
     transition: transform 0.2s;
     max-width: 200px;
     border-width: 0.020833333in;
@@ -320,4 +321,5 @@ nav ul li a:hover {
 .btn:hover {
     transform: scale(1.01);
     color: var(--main-bg-color);
+    background-color: var(--primary-color);
 }
