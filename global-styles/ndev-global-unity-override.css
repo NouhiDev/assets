@@ -48,6 +48,7 @@ body {
 #unity-logo {
     width: 154px;
     height: 130px;
+    display: none;
 }
 
 #unity-progress-bar-empty {
@@ -75,6 +76,7 @@ body {
     float: left;
     width: 204px;
     height: 38px;
+    display: none;
 }
 
 #unity-build-title {
