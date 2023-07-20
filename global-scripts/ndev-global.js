@@ -5,7 +5,6 @@
 // Global JavaScript for all sites on nouhi.dev
 
 // ! Requires jQuery ! (https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js)
-// ! Requires ndev-site.js to function correctly ! (https://nouhi.dev/assets/global-scripts/ndev-site.js)
 
 const NAV_URL = "https://nouhi.dev/assets/html-templates/navbar.txt";
 
