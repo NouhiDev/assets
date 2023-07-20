@@ -4,7 +4,7 @@
 
 // Global JavaScript for all sites on nouhi.dev
 
-// ! Requires jQuery ! (https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js)
+// ! Requires jQuery ! (https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js)
 
 const NAV_URL = "https://nouhi.dev/assets/html-templates/navbar.txt";
 
@@ -20,11 +20,16 @@ function delay(time) {
     return new Promise((resolve) => setTimeout(resolve, time));
 }
 
-function setUpNavBar() {
-    fetch(NAV_URL)
-    .then( r => r.text() )
-    .then( t => {
+async function setUpNavBar() {
+    try {
+        const response = await fetch(NAV_URL);
+        if (!response.ok) {
+            throw new Error("Failed to fetch the navbar from NDev Assets.");
+        }
+        const t = await response.text();
         var whereToInject = document.getElementsByTagName("header")[0];
         whereToInject.innerHTML += t;
-    });
+    } catch (error) {
+        console.error("Could not set up the navbar!", error);
+    }
 }
