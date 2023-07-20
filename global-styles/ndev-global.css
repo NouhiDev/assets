@@ -295,9 +295,18 @@ nav ul li a:hover {
     transition: transform 0.2s;
 }
 
+.title-split {
+    color: var(--primary-color);
+}
 
 .subtitle {
-
+    text-align: center;
+    font-family: "Rubik", sans-serif;
+    padding: auto;
+    margin: 0.9375pc;
+    color: #929292;
+    font-size: 20px;
+    transition: transform 0.2s;
 }
 
 .btn {
