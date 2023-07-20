@@ -25,6 +25,11 @@ function delay(time) {
 }
 
 async function setUpNavBar() {
+    if (!document.getElementsByTagName("header")[0]) {
+        var header = document.createElement("header");
+        document.body.appendChild(header);
+    }
+
     try {
         const response = await fetch(NAV_URL);
         if (!response.ok) {
