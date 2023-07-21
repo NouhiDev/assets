@@ -241,6 +241,9 @@ function genreHTML(genreArray) {
       case "Classic Horror":
         genreHTMLString += "<span class='tag classic-horror'>Classic Horror</span>"
         break;
+      case "Remake":
+        genreHTMLString += "<span class='tag' style='background-color: #5a7041;'>Remake</span>"
+        break;
     }
 
     if (genreArray.length > 1 && i != genreArray.length - 1) genreHTMLString += " ";
