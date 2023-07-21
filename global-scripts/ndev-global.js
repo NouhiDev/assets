@@ -6,7 +6,16 @@
 
 // ! Requires jQuery ! (https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js)
 
+if (typeof jQuery === "undefined") {
+    var script = document.createElement('script');
+    script.src = "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js";
+    document.head.appendChild(script);
+}
+
+
 const NAV_URL = "https://nouhi.dev/assets/html-templates/navbar.txt";
+
+
 
 $(window).on("load", async function () {
     usageDisplay();
