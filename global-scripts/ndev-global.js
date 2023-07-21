@@ -4,20 +4,26 @@
 
 // Global JavaScript for all sites on nouhi.dev
 
-// ! Requires jQuery ! (https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js)
-
-if (typeof jQuery === "undefined") {
-    var script = document.createElement('script');
-    script.src = "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js";
-    document.head.appendChild(script);
-}
-
-
 const NAV_URL = "https://nouhi.dev/assets/html-templates/navbar.txt";
 
+if (typeof jQuery === "undefined") {
+    var script = document.createElement("script");
+    script.src = "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js";
 
+    script.onload = function () {
+        $(document).ready(function () {
+            init()
+        });
+    };
 
-$(window).on("load", async function () {
+    document.head.appendChild(script);
+} else {
+    $(document).ready(function () {
+        init();
+    });
+}
+
+function init() {
     usageDisplay();
 
     setUpLoader();
@@ -27,7 +33,7 @@ $(window).on("load", async function () {
         $(".content").fadeIn(1000)
         setUpNavBar();
     });
-});
+}
 
 function delay(time) {
     return new Promise((resolve) => setTimeout(resolve, time));
