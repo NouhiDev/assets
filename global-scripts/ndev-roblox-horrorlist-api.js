@@ -62,9 +62,7 @@ async function fetchSpreadSheetData() {
 
   const gameDataFromAPI = [...data.gameData[0]["data"], ...data.gameData[1]["data"], ...data.gameData[2]["data"]];
   const gameIconDataFromAPI = [...data.gameIconData[0]["data"], ...data.gameIconData[1]["data"], ...data.gameIconData[2]["data"]];
-
-  console.log(data.spreadSheetData);
-
+  
   for (let i = 0; i < gameUIDS.length; i++) {
     var genreArray = data.spreadSheetData[i].Genre.split(", ");
     var genreHTMLText = genreHTML(genreArray);
