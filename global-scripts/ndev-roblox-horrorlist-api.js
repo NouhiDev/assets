@@ -17,6 +17,7 @@
 var contentDoc = document.getElementById("content");
 
 window.onload = function () {
+    usageDisplay();
     fetchGames();
     $('header').hide();
 };
