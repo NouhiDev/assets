@@ -6,6 +6,16 @@
 
 const NAV_URL = "https://nouhi.dev/assets/html-templates/navbar.txt";
 
+function addGlobalCSS() {
+    var css = document.createElement("link");
+    css.rel = "stylesheet";
+    css.type = "text/css";
+    css.href = "https://nouhi.dev/assets/global-styles/ndev-global.css";
+    document.head.appendChild(css);
+}
+
+addGlobalCSS();
+
 if (typeof jQuery === "undefined") {
     var script = document.createElement("script");
     script.src = "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js";
