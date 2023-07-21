@@ -1,75 +1,96 @@
-// ██████╗░░█████╗░██████╗░██╗░░░░░░█████╗░██╗░░██╗
-// ██╔══██╗██╔══██╗██╔══██╗██║░░░░░██╔══██╗╚██╗██╔╝
-// ██████╔╝██║░░██║██████╦╝██║░░░░░██║░░██║░╚███╔╝░
-// ██╔══██╗██║░░██║██╔══██╗██║░░░░░██║░░██║░██╔██╗░
-// ██║░░██║╚█████╔╝██████╦╝███████╗╚█████╔╝██╔╝╚██╗
-// ╚═╝░░╚═╝░╚════╝░╚═════╝░╚══════╝░╚════╝░╚═╝░░╚═╝
+// ░█▀▀█ ░█▀▀▀█ ░█▀▀█ ░█─── ░█▀▀▀█ ▀▄░▄▀ 
+// ░█▄▄▀ ░█──░█ ░█▀▀▄ ░█─── ░█──░█ ─░█── 
+// ░█─░█ ░█▄▄▄█ ░█▄▄█ ░█▄▄█ ░█▄▄▄█ ▄▀░▀▄ 
 
-// ██╗░░██╗░█████╗░██████╗░██████╗░░█████╗░██████╗░██╗░░░░░██╗░██████╗████████╗  ░█████╗░██████╗░██╗
-// ██║░░██║██╔══██╗██╔══██╗██╔══██╗██╔══██╗██╔══██╗██║░░░░░██║██╔════╝╚══██╔══╝  ██╔══██╗██╔══██╗██║
-// ███████║██║░░██║██████╔╝██████╔╝██║░░██║██████╔╝██║░░░░░██║╚█████╗░░░░██║░░░  ███████║██████╔╝██║
-// ██╔══██║██║░░██║██╔══██╗██╔══██╗██║░░██║██╔══██╗██║░░░░░██║░╚═══██╗░░░██║░░░  ██╔══██║██╔═══╝░██║
-// ██║░░██║╚█████╔╝██║░░██║██║░░██║╚█████╔╝██║░░██║███████╗██║██████╔╝░░░██║░░░  ██║░░██║██║░░░░░██║
-// ╚═╝░░╚═╝░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝░╚════╝░╚═╝░░╚═╝╚══════╝╚═╝╚═════╝░░░░╚═╝░░░  ╚═╝░░╚═╝╚═╝░░░░░╚═╝
+// ░█─░█ ░█▀▀▀█ ░█▀▀█ ░█▀▀█ ░█▀▀▀█ ░█▀▀█ ░█─── ▀█▀ ░█▀▀▀█ ▀▀█▀▀ 
+// ░█▀▀█ ░█──░█ ░█▄▄▀ ░█▄▄▀ ░█──░█ ░█▄▄▀ ░█─── ░█─ ─▀▀▀▄▄ ─░█── 
+// ░█─░█ ░█▄▄▄█ ░█─░█ ░█─░█ ░█▄▄▄█ ░█─░█ ░█▄▄█ ▄█▄ ░█▄▄▄█ ─░█── 
+
+// ───░█ ░█▀▀▀█ 
+// ─▄─░█ ─▀▀▀▄▄ 
+// ░█▄▄█ ░█▄▄▄█
 
 // Created by nouhidev
 
-var contentDoc = document.getElementById("content");
+const maxUIDChunkSize = 100;
+const API_BASE_URL = "https://ndevapi.com";
+
+const data = {
+  spreadSheetData: [],
+  gameData: [],
+  gameIconData: [],
+};
 
 window.onload = function () {
   usageDisplay();
-  fetchGames();
+  fetchSpreadSheetData()
   $('header').hide();
 };
 
-var tablePopulated = false;
+async function fetchSpreadSheetData() {
+  const table = document.getElementById("table-to-populate");
+  const elem = document.getElementById("myBar");
 
-async function fetchGames() {
-  var table = document.getElementById("table-to-populate");
-  var elem = document.getElementById("myBar");
-
-  var spreadSheetDataResponse = await fetch(
+  const spreadSheetDataResponse = await fetch(
     "https://opensheet.elk.sh/16vH1l9tcKMEs8MATdjrp_Op-sMIL9-0jRQnBqFEthGo/3"
   );
-  var spreadSheetData = await spreadSheetDataResponse.json();
+  data.spreadSheetData = await spreadSheetDataResponse.json();
 
-  const requests = [];
-  for (let i = 0; i < spreadSheetData.length; i++) {
-    if (spreadSheetData[i].UID === "") break;
+  const gameUIDS = data.spreadSheetData
+    .filter((entry, index) => entry.Ambience !== "")
+    .map((entry) => entry.UID);
 
-    var progress = (i - 0) / spreadSheetData.length * 100;
-    elem.style.width = progress + "%";
-
-    const apiGameDataPromise = fetch(`https://ndevapi.com/game-info/${spreadSheetData[i].UID}`).then(response => response.json());
-    const apiGameIconDataPromise = fetch(`https://ndevapi.com/game-icon/${spreadSheetData[i].UID}`).then(response => response.json());
-
-    requests.push(Promise.all([apiGameDataPromise, apiGameIconDataPromise]).then(([apiGameData, apiGameIconData]) => {
-
-      var genreArray = spreadSheetData[i].Genre.split(", ");
-      var genreHTMLText = genreHTML(genreArray);
-
-      var row = ` <tr class="hover-reveal" data-tooltip="${toolTipContent(
-        spreadSheetData,
-        apiGameData,
-        apiGameIconData,
-        i,
-        genreHTMLText
-      )}">
-          <td data-th="Placement">${i + 1}.</td>
-          <td data="Icon"><img class="game-icon" src="${apiGameIconData.data[0].imageUrl}"></td>
-          <td data-th="Title" class="game-title">${apiGameData["data"][0].name}</td>
-          <td data-th="Creator" class="align-left">${JSON.parse(
-        JSON.stringify(apiGameData["data"][0].creator)
-      ).name}</td>
-          <td data-th="Rating" class="align-left">${spreadSheetData[i].Rating}</td>
-          </tr>`;
-
-      return row;
-    }));
+  const chunks = [];
+  for (let i = 0; i < gameUIDS.length; i += maxUIDChunkSize) {
+    chunks.push(gameUIDS.slice(i, i + maxUIDChunkSize));
   }
 
-  const rows = await Promise.all(requests);
-  table.innerHTML = rows.join('');
+  const fetchGameDataPromises = chunks.map((chunk) =>
+    fetch(`${API_BASE_URL}/game-info/${chunk.join(",")}`).then((response) => response.json())
+  );
+
+  const fetchIconDataPromises = chunks.map((chunk) =>
+    fetch(`${API_BASE_URL}/game-icon/${chunk.join(",")}`).then((response) => response.json())
+  );
+
+  elem.style.width = "50%";
+  const gameDataResponses = await Promise.all(fetchGameDataPromises);
+  const iconDataResponses = await Promise.all(fetchIconDataPromises);
+
+  data.gameData = gameDataResponses.reduce((acc, response) => acc.concat(response), []);
+  data.gameIconData = iconDataResponses.reduce((acc, response) => acc.concat(response), []);
+
+  const gameDataFromAPI = [...data.gameData[0]["data"], ...data.gameData[1]["data"], ...data.gameData[2]["data"]];
+  const gameIconDataFromAPI = [...data.gameIconData[0]["data"], ...data.gameIconData[1]["data"], ...data.gameIconData[2]["data"]];
+
+  console.log(data.spreadSheetData);
+
+  for (let i = 0; i < gameUIDS.length; i++) {
+    var genreArray = data.spreadSheetData[i].Genre.split(", ");
+    var genreHTMLText = genreHTML(genreArray);
+
+    var row = ` <tr class="hover-reveal" data-tooltip="${toolTipContent(
+      data.spreadSheetData,
+      gameDataFromAPI,
+      gameIconDataFromAPI,
+      i,
+      genreHTMLText
+    )}">
+          <td data-th="Placement">${i + 1}.</td>
+          <td data="Icon"><img class="game-icon" src="${gameIconDataFromAPI[i].imageUrl}"></td>
+          <td data-th="Title" class="game-title">${gameDataFromAPI[i].name}</td>
+          <td data-th="Creator" class="align-left">${JSON.parse(
+      JSON.stringify(gameDataFromAPI[i].creator)
+    ).name}</td>
+          <td data-th="Rating" class="align-left">${data.spreadSheetData[i].Rating}</td>
+          </tr>`;
+
+    table.innerHTML += row;
+  }
+
+  elem.style.width = "100%";
+
+  await delay(500);
 
   $('header').show();
   document.getElementById("myProgress").style.display = "none";
@@ -78,44 +99,87 @@ async function fetchGames() {
   $("#game-table").DataTable({
     columnDefs: [{ orderable: false, targets: [1, 4] }],
   });
-
-  setUpTooltip();
 }
+
+async function usageDisplay() {
+  console.log(`                                                                                         
+    #     # ######  ####### #     #                                             
+    ##    # #     # #       #     #                                             
+    # #   # #     # #       #     #                                             
+    #  #  # #     # #####   #     #                                             
+    #   # # #     # #        #   #                                              
+    #    ## #     # #         # #                                               
+    #     # ######  #######    #          
+
+    ######  ####### ######  #       ####### #     #                             
+    #     # #     # #     # #       #     #  #   #                              
+    #     # #     # #     # #       #     #   # #                               
+    ######  #     # ######  #       #     #    #                                
+    #   #   #     # #     # #       #     #   # #                               
+    #    #  #     # #     # #       #     #  #   #                              
+    #     # ####### ######  ####### ####### #     #      
+
+    #     # ####### ######  ######  ####### ######  #       ###  #####  ####### 
+    #     # #     # #     # #     # #     # #     # #        #  #     #    #    
+    #     # #     # #     # #     # #     # #     # #        #  #          #    
+    ####### #     # ######  ######  #     # ######  #        #   #####     #    
+    #     # #     # #   #   #   #   #     # #   #   #        #        #    #    
+    #     # #     # #    #  #    #  #     # #    #  #        #  #     #    #    
+    #     # ####### #     # #     # ####### #     # ####### ###  #####     #    
+
+          #  #####                                                              
+          # #     #                                                             
+          # #                                                                   
+          #  #####                                                              
+    #     #       #                                                             
+    #     # #     #                                                             
+     #####   #####                                                              
+                        
+    Learn more at
+    
+    https://nouhi.dev/ndev-assets-docs/.
+      `);
+}
+
+function delay(time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
+
 
 function toolTipContent(spreadSheetData, apiGameData, apiGameIconData, i, genreHTMLText) {
   const formatter = Intl.NumberFormat('en', { notation: 'compact' });
   var desc = "";
-  if (apiGameData["data"][0].description === null) desc = "This game does not have a description.";
-  else desc = apiGameData["data"][0].description.replaceAll('"', "")
+  if (apiGameData[i].description === null) desc = "This game does not have a description.";
+  else desc = apiGameData[i].description.replaceAll('"', "")
 
   return `
-    x01${apiGameData["data"][0].name}
-    x02${JSON.parse(JSON.stringify(apiGameData["data"][0].creator))["name"]}
-    x03${desc}
-    x04${genreHTMLText}
-    x05${spreadSheetData[i].Date}
-    xEND
-
-    xR01${spreadSheetData[i].Scariness}
-    xR02${spreadSheetData[i].SoundDesign}
-    xR03${spreadSheetData[i].Story}
-    xR04${spreadSheetData[i].Visuals}
-    xR05${spreadSheetData[i].Ambience}
-    xR06${spreadSheetData[i].Gameplay}
-    xR07${spreadSheetData[i].Creativity}
-    xR08${spreadSheetData[i].Enjoyment}
-    xR09${spreadSheetData[i].ProductionQuality}
-    xR10${spreadSheetData[i].Technical}
-    xREND
-
-    xSD01${formatter.format(apiGameData["data"][0].playing)}
-    xSD02${formatter.format(apiGameData["data"][0].favoritedCount)}
-    xSD03${formatter.format(apiGameData["data"][0].visits)}
-    xSD04${formatter.format(apiGameData["data"][0].maxPlayers)}
-    xSD05${(apiGameData["data"][0].created.substring(0, 10))}
-    xSD06${(apiGameData["data"][0].updated.substring(0, 10))}
-    xSDEND
-    `;
+      x01${apiGameData[i].name}
+      x02${JSON.parse(JSON.stringify(apiGameData[i].creator))["name"]}
+      x03${desc}
+      x04${genreHTMLText}
+      x05${spreadSheetData[i].Date}
+      xEND
+  
+      xR01${spreadSheetData[i].Scariness}
+      xR02${spreadSheetData[i].SoundDesign}
+      xR03${spreadSheetData[i].Story}
+      xR04${spreadSheetData[i].Visuals}
+      xR05${spreadSheetData[i].Ambience}
+      xR06${spreadSheetData[i].Gameplay}
+      xR07${spreadSheetData[i].Creativity}
+      xR08${spreadSheetData[i].Enjoyment}
+      xR09${spreadSheetData[i].ProductionQuality}
+      xR10${spreadSheetData[i].Technical}
+      xREND
+  
+      xSD01${formatter.format(apiGameData[i].playing)}
+      xSD02${formatter.format(apiGameData[i].favoritedCount)}
+      xSD03${formatter.format(apiGameData[i].visits)}
+      xSD04${formatter.format(apiGameData[i].maxPlayers)}
+      xSD05${(apiGameData[i].created.substring(0, 10))}
+      xSD06${(apiGameData[i].updated.substring(0, 10))}
+      xSDEND
+      `;
 }
 
 
@@ -250,44 +314,4 @@ function genreHTML(genreArray) {
   }
 
   return genreHTMLString;
-}
-
-async function usageDisplay() {
-  console.log(`                                                                                         
-    #     # ######  ####### #     # 
-    ##    # #     # #       #     # 
-    # #   # #     # #       #     # 
-    #  #  # #     # #####   #     # 
-    #   # # #     # #        #   #  
-    #    ## #     # #         # #   
-    #     # ######  #######    #                               
-  
-    ######  ####### ######  #       ####### #     # 
-    #     # #     # #     # #       #     #  #   #  
-    #     # #     # #     # #       #     #   # #   
-    ######  #     # ######  #       #     #    #    
-    #   #   #     # #     # #       #     #   # #   
-    #    #  #     # #     # #       #     #  #   #  
-    #     # ####### ######  ####### ####### #     # 
-                                                   
-    #     # ####### ######  ######  ####### ######  #       ###  #####  ####### 
-    #     # #     # #     # #     # #     # #     # #        #  #     #    #    
-    #     # #     # #     # #     # #     # #     # #        #  #          #    
-    ####### #     # ######  ######  #     # ######  #        #   #####     #    
-    #     # #     # #   #   #   #   #     # #   #   #        #        #    #    
-    #     # #     # #    #  #    #  #     # #    #  #        #  #     #    #    
-    #     # ####### #     # #     # ####### #     # ####### ###  #####     #    
-                                                                               
-       #    ######  ### 
-      # #   #     #  #  
-     #   #  #     #  #  
-    #     # ######   #  
-    ####### #        #  
-    #     # #        #  
-    #     # #       ### 
-                      
-    Learn more at
-  
-    https://nouhi.dev/ndev-assets-docs/.
-    `);
 }
