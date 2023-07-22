@@ -62,10 +62,11 @@ async function fetchSpreadSheetData() {
 
   const gameDataFromAPI = [...data.gameData[0]["data"], ...data.gameData[1]["data"], ...data.gameData[2]["data"]];
   const gameIconDataFromAPI = [...data.gameIconData[0]["data"], ...data.gameIconData[1]["data"], ...data.gameIconData[2]["data"]];
-  
+
   for (let i = 0; i < gameUIDS.length; i++) {
     var genreArray = data.spreadSheetData[i].Genre.split(", ");
     var genreHTMLText = genreHTML(genreArray);
+    var gameURL = "https://www.roblox.com/games/" + gameDataFromAPI[i].rootPlaceId;
 
     var row = ` <tr class="hover-reveal" data-tooltip="${toolTipContent(
       data.spreadSheetData,
@@ -76,7 +77,7 @@ async function fetchSpreadSheetData() {
     )}">
           <td data-th="Placement">${i + 1}.</td>
           <td data="Icon"><img class="game-icon" src="${gameIconDataFromAPI[i].imageUrl}"></td>
-          <td data-th="Title" class="game-title">${gameDataFromAPI[i].name}</td>
+          <td data-th="Title" class="game-title"><a href="${gameURL}" class="game-href">${gameDataFromAPI[i].name}</a></td>
           <td data-th="Creator" class="align-left">${JSON.parse(
       JSON.stringify(gameDataFromAPI[i].creator)
     ).name}</td>
