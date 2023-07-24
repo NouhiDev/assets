@@ -12,6 +12,10 @@
 
 // Created by nouhidev
 
+if (/Android|iPhone/i.test(navigator.userAgent)) {
+  window.open("mobile.html");
+}
+
 const maxUIDChunkSize = 100;
 const API_BASE_URL = "https://ndevapi.com";
 
