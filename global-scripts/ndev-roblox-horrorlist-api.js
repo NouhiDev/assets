@@ -77,7 +77,12 @@ async function fetchSpreadSheetData() {
     )}">
           <td data-th="Placement">${i + 1}.</td>
           <td data="Icon"><img class="game-icon" src="${gameIconDataFromAPI[i].imageUrl}"></td>
-          <td data-th="Title" class="game-title"><a href="${gameURL}" class="game-href">${gameDataFromAPI[i].name}</a></td>
+          <td data-th="Title" class="game-title"><a href="game.html" class="game-href" onlick="loadGame(
+            ${i+1}, 
+            ${data.spreadSheetData},
+            ${gameDataFromAPI[i]},
+            ${gameIconDataFromAPI[i]}
+            )">${gameDataFromAPI[i].name}</a></td>
           <td data-th="Creator" class="align-left">${JSON.parse(
       JSON.stringify(gameDataFromAPI[i].creator)
     ).name}</td>
