@@ -77,8 +77,8 @@ async function fetchSpreadSheetData() {
     )}">
           <td data-th="Placement">${i + 1}.</td>
           <td data="Icon"><img class="game-icon" src="${gameIconDataFromAPI[i].imageUrl}"></td>
-          <td data-th="Title" class="game-title"><a href="game.html" class="game-href" onlick="loadGame(
-            ${i+1}, 
+          <td data-th="Title" class="game-title"><a href="#" class="game-href" onlick="loadGame(
+            ${i + 1}, 
             ${data.spreadSheetData},
             ${gameDataFromAPI[i]},
             ${gameIconDataFromAPI[i]}
@@ -330,4 +330,12 @@ function youtubeButton() {
 
 function discordButton() {
   window.open("https://discord.gg/Zbxst3g4ts", "_blank");
+}
+
+function loadGame(number, spreadSheetData, gameData, gameIconData) {
+  localStorage.setItem('number', number);
+  localStorage.setItem('spreadSheetData', spreadSheetData);
+  localStorage.setItem('gameData', gameData);
+  localStorage.setItem('gameIconData', gameIconData);
+  window.location.href = 'game.html';
 }
