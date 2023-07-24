@@ -72,10 +72,6 @@ async function fetchSpreadSheetData() {
   const gameIconDataFromAPI = [...data.gameIconData[0]["data"], ...data.gameIconData[1]["data"], ...data.gameIconData[2]["data"]];
 
   for (let i = 0; i < gameUIDS.length; i++) {
-    var genreArray = data.spreadSheetData[i].Genre.split(", ");
-    var genreHTMLText = genreHTML(genreArray);
-    var gameURL = "https://www.roblox.com/games/" + gameDataFromAPI[i].rootPlaceId;
-
     var row = ` <tr class="hover-reveal">
           <td data-th="Placement">${i + 1}.</td>
           <td data="Icon"><img class="game-icon" src="${gameIconDataFromAPI[i].imageUrl}"></td>
