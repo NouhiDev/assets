@@ -40,9 +40,10 @@ async function fetchSpreadSheetData() {
   const elem = document.getElementById("myBar");
 
   const spreadSheetDataResponse = await fetch(
-    "https://opensheet.elk.sh/16vH1l9tcKMEs8MATdjrp_Op-sMIL9-0jRQnBqFEthGo/3"
+    "https://nouhi.dev/roblox-horrorlist/database.json"
   );
   data.spreadSheetData = await spreadSheetDataResponse.json();
+  console.log(data.spreadSheetData);
 
   const gameUIDS = data.spreadSheetData
     .filter((entry, index) => entry.Ambience !== "")
