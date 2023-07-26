@@ -73,8 +73,7 @@ async function fetchData() {
 
 
     for (let i = 0; i < gameUIDS.length; i++) {
-        console.log("Generating: " + gameUIDS[i]);
-        console.log("Image Data: " + gameIconDataFromAPI[i])
+        console.log(gameIconDataFromAPI[i])
 
         var row = ` <tr class="hover-reveal">
           <td data-th="Placement">${i + 1}.</td>
