@@ -159,5 +159,5 @@ function discordButton() {
 function loadGame(number, UID) {
     localStorage.setItem('number', number);
     localStorage.setItem('UID', UID);
-    window.location.href = 'game.html';
+    window.location.href = '../pages/game.html';
 }
