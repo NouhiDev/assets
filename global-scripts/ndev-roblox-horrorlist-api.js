@@ -41,8 +41,7 @@ async function fetchData() {
     for (let i = 0; i < data.databaseData.games.length; i++) {
         const element = data.databaseData.games[i];
         if (element.ambience !== "") gameUIDS.push(element.uid);
-    }   
-
+    }
 
     const chunks = [];
     for (let i = 0; i < gameUIDS.length; i += maxUIDChunkSize) {
@@ -64,8 +63,14 @@ async function fetchData() {
     data.gameData = gameDataResponses.reduce((acc, response) => acc.concat(response), []);
     data.gameIconData = iconDataResponses.reduce((acc, response) => acc.concat(response), []);
 
-    const gameDataFromAPI = [...data.gameData[0]["data"], ...data.gameData[1]["data"], ...data.gameData[2]["data"]];
-    const gameIconDataFromAPI = [...data.gameIconData[0]["data"], ...data.gameIconData[1]["data"], ...data.gameIconData[2]["data"]];
+    let gameDataFromAPI = [];
+    let gameIconDataFromAPI = [];
+
+    data.gameData.forEach((item, index) => {
+        gameDataFromAPI.push(...item.data);
+        gameIconDataFromAPI.push(...data.gameIconData[index]?.data || []);
+    });
+
 
     for (let i = 0; i < gameUIDS.length; i++) {
         var row = ` <tr class="hover-reveal">
