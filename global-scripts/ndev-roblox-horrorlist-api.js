@@ -71,10 +71,11 @@ async function fetchData() {
         gameIconDataFromAPI.push(...data.gameIconData[index]?.data || []);
     });
 
-
-    console.log(gameUIDS);
-
     for (let i = 0; i < gameUIDS.length; i++) {
+
+        console.log("Error getting game icon for UID: " + gameUIDS[i]);
+        console.log(gameIconDataFromAPI[i]);
+
         var row = ` <tr class="hover-reveal">
           <td data-th="Placement">${i + 1}.</td>
           <td data="Icon"><img class="game-icon" src="${gameIconDataFromAPI[i].imageUrl}"></td>
