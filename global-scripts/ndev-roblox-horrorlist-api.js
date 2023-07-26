@@ -73,6 +73,7 @@ async function fetchData() {
 
 
     for (let i = 0; i < gameUIDS.length; i++) {
+        console.log(gameUIDS[i])
         console.log(gameIconDataFromAPI[i])
 
         var row = ` <tr class="hover-reveal">
