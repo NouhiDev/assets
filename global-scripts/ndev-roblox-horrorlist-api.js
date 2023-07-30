@@ -170,27 +170,33 @@ function loadGame(number, UID) {
     // window.location.href = './pages/game.html';
 }
 
+var cantReachAPI = false;
+
 function addStatusButton() {
-    // Create a new button element
-    var button = document.createElement("button");
-    button.className = "status-button";
-    button.onclick = api_status;
-  
-    // Create the icon element and add it to the button
-    var icon = document.createElement("i");
-    icon.className = "fas fa-spinner";
-    button.appendChild(icon);
-  
-    // Add text to the button
-    var buttonText = document.createTextNode("Check API Status");
-    button.appendChild(buttonText);
-  
-    // Get the "button-container" div
-    var buttonContainer = document.getElementsByClassName("button-container")[0];
-  
-    // Append the button to the "button-container" div
-    buttonContainer.appendChild(button);
-  }
+    if (!cantReachAPI) {
+        cantReachAPI = true;
+
+        // Create a new button element
+        var button = document.createElement("button");
+        button.className = "status-button";
+        button.onclick = api_status;
+    
+        // Create the icon element and add it to the button
+        var icon = document.createElement("i");
+        icon.className = "fas fa-spinner";
+        button.appendChild(icon);
+    
+        // Add text to the button
+        var buttonText = document.createTextNode(" Check API Status");
+        button.appendChild(buttonText);
+    
+        // Get the "button-container" div
+        var buttonContainer = document.getElementsByClassName("button-container")[0];
+    
+        // Append the button to the "button-container" div
+        buttonContainer.appendChild(button);
+    }
+}
 
 function checkstatus() {
     const url = "https://ndevapi.com";
