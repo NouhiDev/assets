@@ -22,7 +22,6 @@ const data = {
 };
 
 window.onload = function () {
-    checkstatus();
     usageDisplay();
     fetchData()
     $('header').hide();
