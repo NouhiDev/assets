@@ -158,6 +158,10 @@ function discordButton() {
     window.open("https://discord.gg/Zbxst3g4ts", "_blank");
 }
 
+function twitterButton() {
+    window.open("https://twitter.com/RBLXHorrorlist", "_blank");
+}
+
 function loadGame(number, UID) {
     localStorage.setItem('number', number);
     localStorage.setItem('UID', UID);
