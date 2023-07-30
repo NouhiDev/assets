@@ -98,6 +98,8 @@ async function fetchData() {
     $("#game-table").DataTable({
         columnDefs: [{ orderable: false, targets: [1, 4] }],
     });
+
+    document.getElementsByTagName("footer")[0].style.bottom = "";
 }
 
 async function usageDisplay() {
