@@ -99,7 +99,7 @@ async function fetchData() {
         columnDefs: [{ orderable: false, targets: [1, 4] }],
     });
 
-    document.getElementsByTagName("footer")[0].style.bottom = "";
+    document.getElementsByTagName("footer")[0].style.bottom = "auto";
 }
 
 async function usageDisplay() {
