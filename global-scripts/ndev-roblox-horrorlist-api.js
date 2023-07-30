@@ -166,5 +166,4 @@ function loadGame(number, UID) {
     localStorage.setItem('number', number);
     localStorage.setItem('UID', UID);
     window.open('./pages/game.html', '_blank');
-    // window.location.href = './pages/game.html';
 }
