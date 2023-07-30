@@ -186,7 +186,7 @@ function addStatusButton() {
     button.appendChild(buttonText);
   
     // Get the "button-container" div
-    var buttonContainer = document.getElementById("button-container");
+    var buttonContainer = document.getElementsByClassName("button-container")[0];
   
     // Append the button to the "button-container" div
     buttonContainer.appendChild(button);
