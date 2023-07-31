@@ -80,13 +80,13 @@ async function fetchData() {
               ${i + 1}, 
               ${gameUIDS[i]})">${gameDataFromAPI[i].name}</a></td>
             <td data-th="Creator" class="align-left">${JSON.parse(
-              JSON.stringify(gameDataFromAPI[i].creator)
-          ).name}</td>
+                JSON.stringify(gameDataFromAPI[i].creator)
+            ).name}</td>
             <td data-th="Rating" class="align-left">${data.databaseData.games[i].ratings.rating}</td>
             </tr>`;
-  
-          table.innerHTML += row;
-        } catch(e) {
+
+            table.innerHTML += row;
+        } catch (e) {
             console.error(e);
         }
     }
@@ -104,6 +104,11 @@ async function fetchData() {
     });
 
     document.getElementsByTagName("footer")[0].style.bottom = "auto";
+
+    const elementToRemove = document.getElementById("myProgressText");
+    if (elementToRemove) {
+        elementToRemove.parentNode.removeChild(elementToRemove);
+    }
 }
 
 async function usageDisplay() {
