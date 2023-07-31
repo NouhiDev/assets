@@ -72,19 +72,23 @@ async function fetchData() {
     });
 
     for (let i = 0; i < gameUIDS.length; i++) {
-        var row = ` <tr class="hover-reveal">
-          <td data-th="Placement">${i + 1}.</td>
-          <td data="Icon"><img class="game-icon" src="${gameIconDataFromAPI[i].imageUrl}"></td>
-          <td data-th="Title" class="game-title"><a href="#" class="game-href" onclick="loadGame(
-            ${i + 1}, 
-            ${gameUIDS[i]})">${gameDataFromAPI[i].name}</a></td>
-          <td data-th="Creator" class="align-left">${JSON.parse(
-            JSON.stringify(gameDataFromAPI[i].creator)
-        ).name}</td>
-          <td data-th="Rating" class="align-left">${data.databaseData.games[i].ratings.rating}</td>
-          </tr>`;
-
-        table.innerHTML += row;
+        try {
+            var row = ` <tr class="hover-reveal">
+            <td data-th="Placement">${i + 1}.</td>
+            <td data="Icon"><img class="game-icon" src="${gameIconDataFromAPI[i].imageUrl}"></td>
+            <td data-th="Title" class="game-title"><a href="#" class="game-href" onclick="loadGame(
+              ${i + 1}, 
+              ${gameUIDS[i]})">${gameDataFromAPI[i].name}</a></td>
+            <td data-th="Creator" class="align-left">${JSON.parse(
+              JSON.stringify(gameDataFromAPI[i].creator)
+          ).name}</td>
+            <td data-th="Rating" class="align-left">${data.databaseData.games[i].ratings.rating}</td>
+            </tr>`;
+  
+          table.innerHTML += row;
+        } catch(e) {
+            console.error(e);
+        }
     }
 
     elem.style.width = "100%";
