@@ -32,7 +32,7 @@ async function fetchData() {
     const elem = document.getElementById("myBar");
 
     const databaseDataResponse = await fetch(
-        "https://nouhi.dev/roblox-horrorlist/database.json"
+        "https://robloxhorrorlist.com/database.json"
     );
     data.databaseData = await databaseDataResponse.json();
 
