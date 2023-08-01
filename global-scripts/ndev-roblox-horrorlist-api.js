@@ -63,7 +63,7 @@ async function fetchData() {
     console.time("Fetch Game Info RBLX");
     const fetchGameDataPromisesRBLX = chunks.map((chunk) =>
         fetch(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${chunk.join(",")}&returnPolicy=PlaceHolder&size=50x50&format=Png&isCircular=false`, { method: 'GET',
-        mode: 'no-cors'}).then((response) => response.json())
+        mode: 'no-cors'})
     );
     console.timeEnd("Fetch Game Info RBLX");
     console.log(fetchGameDataPromisesRBLX);
