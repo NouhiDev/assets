@@ -41,7 +41,6 @@ async function fetchData() {
     for (let i = 0; i < data.databaseData.games.length; i++) {
         const element = data.databaseData.games[i];
         if (element.ambience !== "") gameUIDS.push(element.uid);
-        console.log("Game UID loaded!");
     }
 
     const chunks = [];
@@ -49,18 +48,24 @@ async function fetchData() {
         chunks.push(gameUIDS.slice(i, i + maxUIDChunkSize));
     }
 
+    console.time("Fetch Game Info");
     const fetchGameDataPromises = chunks.map((chunk) =>
         fetch(`${API_BASE_URL}/game-info/${chunk.join(",")}`).then((response) => response.json())
     );
+    console.timeEnd("Fetch Game Info");
 
+    console.time("Fetch Game Icon");
     const fetchIconDataPromises = chunks.map((chunk) =>
         fetch(`${API_BASE_URL}/game-icon/${chunk.join(",")}`).then((response) => response.json())
     );
+    console.timeEnd("Fetch Game Icon");
 
     elem.style.width = "50%";
 
+    console.time("Fetch Game Info & Icon");
     const gameDataResponses = await Promise.all(fetchGameDataPromises);
     const iconDataResponses = await Promise.all(fetchIconDataPromises);
+    console.timeEnd("Fetch Game Info & Icon");
 
     console.log(fetchGameDataPromises);
     console.log(gameDataResponses);
