@@ -66,7 +66,8 @@ async function fetchData() {
         mode: 'no-cors'})
     );
     console.timeEnd("Fetch Game Info RBLX");
-    console.log(fetchGameDataPromisesRBLX);
+    const gameDataResponsesRBLX = await Promise.all(fetchGameDataPromisesRBLX);
+    console.log(gameDataResponsesRBLX);
 
     elem.style.width = "50%";
 
