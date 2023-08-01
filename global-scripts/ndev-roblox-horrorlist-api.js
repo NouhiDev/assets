@@ -75,7 +75,6 @@ async function fetchData() {
         gameIconDataFromAPI.push(...data.gameIconData[index]?.data || []);
     });
     
-    console.time("Add Rows to Table")
     for (let i = 0; i < gameUIDS.length; i++) {
         try {
             var row = ` <tr class="hover-reveal">
@@ -95,7 +94,6 @@ async function fetchData() {
             console.error(e);
         }
     }
-    console.timeEnd("Add Rows to Table")
 
     elem.style.width = "100%";
 
