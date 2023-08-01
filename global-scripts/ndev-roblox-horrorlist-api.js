@@ -62,15 +62,11 @@ async function fetchData() {
 
     console.time("Fetch Game Info RBLX");
     const fetchGameDataPromisesRBLX = chunks.map((chunk) =>
-        fetch(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${chunk.join(",")}&returnPolicy=PlaceHolder&size=50x50&format=Png&isCircular=false`).then((response) => response.json())
+        fetch(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${chunk.join(",")}&returnPolicy=PlaceHolder&size=50x50&format=Png&isCircular=false`, { method: 'GET',
+        mode: 'no-cors'}).then((response) => response.json())
     );
     console.timeEnd("Fetch Game Info RBLX");
-
-    console.time("Fetch Game Icon RBLX");
-    const fetchIconDataPromisesRBLX = chunks.map((chunk) =>
-        fetch(`${API_BASE_URL}/game-icon/${chunk.join(",")}`).then((response) => response.json())
-    );
-    console.timeEnd("Fetch Game Icon RBLX");
+    console.log(fetchGameDataPromisesRBLX);
 
     elem.style.width = "50%";
 
