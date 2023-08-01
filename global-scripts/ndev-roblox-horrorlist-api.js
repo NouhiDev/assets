@@ -42,11 +42,13 @@ async function fetchData() {
         const element = data.databaseData.games[i];
         if (element.ambience !== "") gameUIDS.push(element.uid);
     }
-
+    
     const chunks = [];
     for (let i = 0; i < gameUIDS.length; i += maxUIDChunkSize) {
         chunks.push(gameUIDS.slice(i, i + maxUIDChunkSize));
     }
+
+    console.log(chunks);
 
     console.time("Fetch Game Info");
     const fetchGameDataPromises = chunks.map((chunk) =>
@@ -59,18 +61,6 @@ async function fetchData() {
         fetch(`${API_BASE_URL}/game-icon/${chunk.join(",")}`).then((response) => response.json())
     );
     console.timeEnd("Fetch Game Icon");
-
-    try {
-        console.time("Fetch Game Info RBLX");
-        const fetchGameDataPromisesRBLX = chunks.map((chunk) =>
-            fetch(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${chunk.join(",")}&returnPolicy=PlaceHolder&size=50x50&format=Png&isCircular=false`)
-        );
-        console.timeEnd("Fetch Game Info RBLX");
-        const gameDataResponsesRBLX = await Promise.all(fetchGameDataPromisesRBLX);
-        console.log(gameDataResponsesRBLX);
-    } catch(e) {
-        console.error(e);
-    }
 
     elem.style.width = "50%";
 
