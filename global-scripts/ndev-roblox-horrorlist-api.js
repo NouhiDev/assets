@@ -48,17 +48,24 @@ async function fetchData() {
         chunks.push(gameUIDS.slice(i, i + maxUIDChunkSize));
     }
 
+    console.time("Fetch Game Info");
     const fetchGameDataPromises = chunks.map((chunk) =>
         fetch(`${API_BASE_URL}/game-info/${chunk.join(",")}`).then((response) => response.json())
     );
+    console.timeEnd("Fetch Game Info");
 
+    console.time("Fetch Game Icon")
     const fetchIconDataPromises = chunks.map((chunk) =>
         fetch(`${API_BASE_URL}/game-icon/${chunk.join(",")}`).then((response) => response.json())
     );
+    console.timeEnd("Fetch Game Icon");
 
     elem.style.width = "50%";
+
+    console.time("Fetch Game Info & Icon")
     const gameDataResponses = await Promise.all(fetchGameDataPromises);
     const iconDataResponses = await Promise.all(fetchIconDataPromises);
+    console.timeEnd("Fetch Game Info & Icon")
 
     data.gameData = gameDataResponses.reduce((acc, response) => acc.concat(response), []);
     data.gameIconData = iconDataResponses.reduce((acc, response) => acc.concat(response), []);
@@ -70,7 +77,8 @@ async function fetchData() {
         gameDataFromAPI.push(...item.data);
         gameIconDataFromAPI.push(...data.gameIconData[index]?.data || []);
     });
-
+    
+    console.time("Add Rows to Table")
     for (let i = 0; i < gameUIDS.length; i++) {
         try {
             var row = ` <tr class="hover-reveal">
@@ -90,6 +98,7 @@ async function fetchData() {
             console.error(e);
         }
     }
+    console.timeEnd("Add Rows to Table")
 
     elem.style.width = "100%";
 
