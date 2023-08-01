@@ -60,14 +60,17 @@ async function fetchData() {
     );
     console.timeEnd("Fetch Game Icon");
 
-    console.time("Fetch Game Info RBLX");
-    const fetchGameDataPromisesRBLX = chunks.map((chunk) =>
-        fetch(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${chunk.join(",")}&returnPolicy=PlaceHolder&size=50x50&format=Png&isCircular=false`, { method: 'GET',
-        mode: 'no-cors'})
-    );
-    console.timeEnd("Fetch Game Info RBLX");
-    const gameDataResponsesRBLX = await Promise.all(fetchGameDataPromisesRBLX);
-    console.log(gameDataResponsesRBLX);
+    try {
+        console.time("Fetch Game Info RBLX");
+        const fetchGameDataPromisesRBLX = chunks.map((chunk) =>
+            fetch(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${chunk.join(",")}&returnPolicy=PlaceHolder&size=50x50&format=Png&isCircular=false`)
+        );
+        console.timeEnd("Fetch Game Info RBLX");
+        const gameDataResponsesRBLX = await Promise.all(fetchGameDataPromisesRBLX);
+        console.log(gameDataResponsesRBLX);
+    } catch(e) {
+        console.error(e);
+    }
 
     elem.style.width = "50%";
 
