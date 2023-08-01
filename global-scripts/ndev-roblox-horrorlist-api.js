@@ -67,6 +67,9 @@ async function fetchData() {
     const iconDataResponses = await Promise.all(fetchIconDataPromises);
     console.timeEnd("Fetch Game Info & Icon")
 
+    console.log(fetchGameDataPromises);
+    console.log(gameDataResponses);
+
     data.gameData = gameDataResponses.reduce((acc, response) => acc.concat(response), []);
     data.gameIconData = iconDataResponses.reduce((acc, response) => acc.concat(response), []);
 
