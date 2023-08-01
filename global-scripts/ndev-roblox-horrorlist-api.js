@@ -60,15 +60,24 @@ async function fetchData() {
     );
     console.timeEnd("Fetch Game Icon");
 
+    console.time("Fetch Game Info RBLX");
+    const fetchGameDataPromisesRBLX = chunks.map((chunk) =>
+        fetch(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${chunk.join(",")}&returnPolicy=PlaceHolder&size=50x50&format=Png&isCircular=false`).then((response) => response.json())
+    );
+    console.timeEnd("Fetch Game Info RBLX");
+
+    console.time("Fetch Game Icon RBLX");
+    const fetchIconDataPromisesRBLX = chunks.map((chunk) =>
+        fetch(`${API_BASE_URL}/game-icon/${chunk.join(",")}`).then((response) => response.json())
+    );
+    console.timeEnd("Fetch Game Icon RBLX");
+
     elem.style.width = "50%";
 
     console.time("Fetch Game Info & Icon");
     const gameDataResponses = await Promise.all(fetchGameDataPromises);
     const iconDataResponses = await Promise.all(fetchIconDataPromises);
     console.timeEnd("Fetch Game Info & Icon");
-
-    console.log(fetchGameDataPromises);
-    console.log(gameDataResponses);
 
     data.gameData = gameDataResponses.reduce((acc, response) => acc.concat(response), []);
     data.gameIconData = iconDataResponses.reduce((acc, response) => acc.concat(response), []);
