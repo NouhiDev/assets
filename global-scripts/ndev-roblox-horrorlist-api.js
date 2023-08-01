@@ -41,6 +41,7 @@ async function fetchData() {
     for (let i = 0; i < data.databaseData.games.length; i++) {
         const element = data.databaseData.games[i];
         if (element.ambience !== "") gameUIDS.push(element.uid);
+        console.log("Game UID loaded!");
     }
 
     const chunks = [];
