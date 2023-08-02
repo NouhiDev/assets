@@ -91,28 +91,31 @@ async function fetchData() {
     }
 
     const fetchGameDataPromises = chunks.map((chunk) =>
-        fetchDataWithCaching(`${API_BASE_URL}/game-info/${chunk.join(",")}`).then((response) => response.json())
+        fetchDataWithCaching(`${API_BASE_URL}/game-info/${chunk.join(",")}`, `gameData_${chunk.join(",")}`, 300000)
     );
 
     const fetchIconDataPromises = chunks.map((chunk) =>
-        fetchDataWithCaching(`${API_BASE_URL}/game-icon/${chunk.join(",")}`).then((response) => response.json())
+        fetchDataWithCaching(`${API_BASE_URL}/game-icon/${chunk.join(",")}`, `gameIconData_${chunk.join(",")}`, 300000)
     );
 
     elem.style.width = "50%";
 
-    const gameDataResponses = await Promise.all(fetchGameDataPromises);
-    const iconDataResponses = await Promise.all(fetchIconDataPromises);
+    console.time("Get all Promises");
+    const [gameDataResponses, iconDataResponses] = await Promise.all([
+        Promise.all(fetchGameDataPromises),
+        Promise.all(fetchIconDataPromises),
+    ]);
 
-    data.gameData = gameDataResponses.reduce((acc, response) => acc.concat(response), []);
-    data.gameIconData = iconDataResponses.reduce((acc, response) => acc.concat(response), []);
+    data.gameData = gameDataResponses.flat();
+    data.gameIconData = iconDataResponses.flat();
 
-    let gameDataFromAPI = [];
-    let gameIconDataFromAPI = [];
+    const gameDataFromAPI = data.gameData.reduce((result, item) => {
+        return [...result, ...item["data"]];
+    }, []);
 
-    data.gameData.forEach((item, index) => {
-        gameDataFromAPI.push(...item.data);
-        gameIconDataFromAPI.push(...data.gameIconData[index]?.data || []);
-    });
+    const gameIconDataFromAPI = data.gameIconData.reduce((result, item) => {
+        return [...result, ...item["data"]];
+    }, []);
 
     const fragment = document.createDocumentFragment();
 
