@@ -22,6 +22,7 @@ const data = {
 };
 
 window.onload = function () {
+    console.time("Load Roblox Horrorlist Data");
     usageDisplay();
     fetchData()
     $('header').hide();
@@ -48,24 +49,18 @@ async function fetchData() {
         chunks.push(gameUIDS.slice(i, i + maxUIDChunkSize));
     }
 
-    console.time("Fetch Game Info");
     const fetchGameDataPromises = chunks.map((chunk) =>
         fetch(`${API_BASE_URL}/game-info/${chunk.join(",")}`).then((response) => response.json())
     );
-    console.timeEnd("Fetch Game Info");
 
-    console.time("Fetch Game Icon");
     const fetchIconDataPromises = chunks.map((chunk) =>
         fetch(`${API_BASE_URL}/game-icon/${chunk.join(",")}`).then((response) => response.json())
     );
-    console.timeEnd("Fetch Game Icon");
 
     elem.style.width = "50%";
 
-    console.time("Fetch Game Info & Icon");
     const gameDataResponses = await Promise.all(fetchGameDataPromises);
     const iconDataResponses = await Promise.all(fetchIconDataPromises);
-    console.timeEnd("Fetch Game Info & Icon");
 
     data.gameData = gameDataResponses.reduce((acc, response) => acc.concat(response), []);
     data.gameIconData = iconDataResponses.reduce((acc, response) => acc.concat(response), []);
@@ -121,6 +116,8 @@ async function fetchData() {
     if (elementToRemove) {
         elementToRemove.parentNode.removeChild(elementToRemove);
     }
+
+    console.timeEnd("Load Roblox Horrorlist Data");
 }
 
 async function usageDisplay() {
