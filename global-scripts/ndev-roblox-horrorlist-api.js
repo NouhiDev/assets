@@ -21,6 +21,11 @@ const data = {
     gameIconData: [],
 };
 
+const CACHE_PREFIX = "gameDataCache_";
+const CACHE_EXPIRATION = 2592000000;
+
+const dataCache = new Map();
+
 window.onload = function () {
     console.time("Load Roblox Horrorlist Data");
     usageDisplay();
@@ -28,7 +33,43 @@ window.onload = function () {
     $('header').hide();
 };
 
+function initializeCache() {
+    // Load cached data from local storage
+    for (let key in localStorage) {
+        if (key.startsWith(CACHE_PREFIX)) {
+            const cacheKey = key.substring(CACHE_PREFIX.length);
+            const cacheData = JSON.parse(localStorage.getItem(key));
+            if (cacheData && Date.now() - cacheData.timestamp < CACHE_EXPIRATION) {
+                dataCache.set(cacheKey, cacheData.data);
+            } else {
+                // Remove expired cache data
+                localStorage.removeItem(key);
+            }
+        }
+    }
+}
+
+function saveToCache(cacheKey, data) {
+    dataCache.set(cacheKey, data);
+    const cacheData = { data, timestamp: Date.now() };
+    localStorage.setItem(CACHE_PREFIX + cacheKey, JSON.stringify(cacheData));
+}
+
+async function fetchDataWithCaching(endpoint, cacheKey) {
+    if (dataCache.has(cacheKey)) {
+        console.log('Fetching from cache:', cacheKey);
+        return dataCache.get(cacheKey);
+    }
+
+    console.log('Fetching from API:', endpoint);
+    const response = await fetch(endpoint);
+    const freshData = await response.json();
+    saveToCache(cacheKey, freshData);
+    return freshData;
+}
+
 async function fetchData() {
+    initializeCache();
     const table = document.getElementById("table-to-populate");
     const elem = document.getElementById("myBar");
 
