@@ -91,11 +91,11 @@ async function fetchData() {
     }
 
     const fetchGameDataPromises = chunks.map((chunk) =>
-        fetch(`${API_BASE_URL}/game-info/${chunk.join(",")}`).then((response) => response.json())
+        fetchDataWithCaching(`${API_BASE_URL}/game-info/${chunk.join(",")}`).then((response) => response.json())
     );
 
     const fetchIconDataPromises = chunks.map((chunk) =>
-        fetch(`${API_BASE_URL}/game-icon/${chunk.join(",")}`).then((response) => response.json())
+        fetchDataWithCaching(`${API_BASE_URL}/game-icon/${chunk.join(",")}`).then((response) => response.json())
     );
 
     elem.style.width = "50%";
