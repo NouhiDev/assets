@@ -81,29 +81,29 @@ async function fetchData() {
     const fragment = document.createDocumentFragment();
 
     for (let i = 0; i < gameUIDS.length; i++) {
-        var genreArray = data.spreadSheetData[i].Genre.split(", ");
-        var genreHTMLText = genreHTML(genreArray);
-        var gameURL = "https://www.roblox.com/games/" + gameDataFromAPI[i].rootPlaceId;
+        try {
+            var genreArray = data.spreadSheetData[i].Genre.split(", ");
+            var genreHTMLText = genreHTML(genreArray);
+            var gameURL = "https://www.roblox.com/games/" + gameDataFromAPI[i].rootPlaceId;
 
-        var row = ` <tr class="hover-reveal" data-tooltip="${toolTipContent(
-            data.spreadSheetData,
-            gameDataFromAPI,
-            gameIconDataFromAPI,
-            i,
-            genreHTMLText
-        )}">
-          <td data-th="Placement">${i + 1}.</td>
-          <td data="Icon"><img class="game-icon" src="${gameIconDataFromAPI[i].imageUrl}"></td>
-          <td data-th="Title" class="game-title"><a href="${gameURL}" class="game-href">${gameDataFromAPI[i].name}</a></td>
-          <td data-th="Creator" class="align-left">${JSON.parse(
-            JSON.stringify(gameDataFromAPI[i].creator)
-        ).name}</td>
-          <td data-th="Rating" class="align-left">${data.spreadSheetData[i].Rating}</td>
-          </tr>`;
+            var row = ` <tr class="hover-reveal">
+                  <td data-th="Placement">${i + 1}.</td>
+                  <td data="Icon"><img class="game-icon" src="${gameIconDataFromAPI[i].imageUrl}"></td>
+                  <td data-th="Title" class="game-title"><a href="#" class="game-href" onclick="loadGame(
+                    ${i + 1}, 
+                    ${gameUIDS[i]})">${gameDataFromAPI[i].name}</a></td>
+                  <td data-th="Creator" class="align-left">${JSON.parse(
+                JSON.stringify(gameDataFromAPI[i].creator)
+            ).name}</td>
+                  <td data-th="Rating" class="align-left">${data.databaseData.games[i].ratings.rating}</td>
+                  </tr>`;
 
-        const rowElement = document.createElement('tr');
-        rowElement.innerHTML = row;
-        fragment.appendChild(rowElement);
+            const rowElement = document.createElement('tr');
+            rowElement.innerHTML = row;
+            fragment.appendChild(rowElement);
+        } catch (e) {
+            console.error(e);
+        }
     }
     table.appendChild(fragment);
 
