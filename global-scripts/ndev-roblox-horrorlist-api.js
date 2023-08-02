@@ -82,10 +82,6 @@ async function fetchData() {
 
     for (let i = 0; i < gameUIDS.length; i++) {
         try {
-            var genreArray = data.databaseData["games"][i]["genres"].split(", ");
-            var genreHTMLText = genreHTML(genreArray);
-            var gameURL = "https://www.roblox.com/games/" + gameDataFromAPI[i].rootPlaceId;
-
             var row = ` <tr class="hover-reveal">
                   <td data-th="Placement">${i + 1}.</td>
                   <td data="Icon"><img class="game-icon" src="${gameIconDataFromAPI[i].imageUrl}"></td>
