@@ -48,8 +48,6 @@ async function fetchData() {
         chunks.push(gameUIDS.slice(i, i + maxUIDChunkSize));
     }
 
-    console.log(chunks);
-
     console.time("Fetch Game Info");
     const fetchGameDataPromises = chunks.map((chunk) =>
         fetch(`${API_BASE_URL}/game-info/${chunk.join(",")}`).then((response) => response.json())
