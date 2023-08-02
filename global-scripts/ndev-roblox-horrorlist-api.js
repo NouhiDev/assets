@@ -82,7 +82,7 @@ async function fetchData() {
 
     for (let i = 0; i < gameUIDS.length; i++) {
         try {
-            var genreArray = data.spreadSheetData[i].Genre.split(", ");
+            var genreArray = data.databaseData[i].Genre.split(", ");
             var genreHTMLText = genreHTML(genreArray);
             var gameURL = "https://www.roblox.com/games/" + gameDataFromAPI[i].rootPlaceId;
 
