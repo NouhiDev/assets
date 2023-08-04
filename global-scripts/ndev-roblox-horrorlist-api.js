@@ -27,7 +27,6 @@ const CACHE_EXPIRATION = 2592000000;
 const dataCache = new Map();
 
 window.onload = function () {
-    console.time("Load Roblox Horrorlist Data");
     usageDisplay();
     fetchData()
     $('header').hide();
@@ -57,11 +56,10 @@ function saveToCache(cacheKey, data) {
 
 async function fetchDataWithCaching(endpoint, cacheKey) {
     if (dataCache.has(cacheKey)) {
-        console.log('Fetching from cache:', cacheKey);
         return dataCache.get(cacheKey);
     }
 
-    console.log('Fetching from API:', endpoint);
+    document.getElementById("myProgressText").innerText = "Loading... (new Ratings found!)";
     const response = await fetch(endpoint);
     const freshData = await response.json();
     saveToCache(cacheKey, freshData);
@@ -160,8 +158,6 @@ async function fetchData() {
     if (elementToRemove) {
         elementToRemove.parentNode.removeChild(elementToRemove);
     }
-
-    console.timeEnd("Load Roblox Horrorlist Data");
 }
 
 async function usageDisplay() {
