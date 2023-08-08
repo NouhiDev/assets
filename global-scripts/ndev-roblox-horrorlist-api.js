@@ -73,7 +73,7 @@ async function fetchData() {
     const elem = document.getElementById("myBar");
 
     const databaseDataResponse = await fetch(
-        "https://robloxhorrorlist.com/database.json"
+        "https://robloxhorrorlist.com/weights-database.json"
     );
     data.databaseData = await databaseDataResponse.json();
 
