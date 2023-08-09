@@ -84,7 +84,6 @@ async function fetchDataAndUpdateUI() {
 
         const databaseDataResponse = await fetch("https://robloxhorrorlist.com/weights-database.json");
         const databaseData = await databaseDataResponse.json();
-        console.log(databaseData);
 
         const gameUIDS = databaseData.games
             .filter(element => element.ambience !== "")
