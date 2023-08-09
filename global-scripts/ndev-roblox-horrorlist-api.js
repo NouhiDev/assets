@@ -60,7 +60,7 @@ async function fetchDataWithCaching(endpoint, cacheKey) {
     }
 
     var aTag = document.querySelector("#myProgressText .tit-credits a");
-    aTag.textContent = "Updating...";
+    aTag.textContent = "Updating... (Message nouhi#0439 if you're stuck here)";
     const response = await fetch(endpoint);
     const freshData = await response.json();
     saveToCache(cacheKey, freshData);
