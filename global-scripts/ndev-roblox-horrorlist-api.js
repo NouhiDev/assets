@@ -23,99 +23,100 @@ const data = {
 
 const CACHE_PREFIX = "gameDataCache_";
 const CACHE_EXPIRATION = 2592000000;
+const DB_NAME = "gameDataDB";
+const DB_VERSION = 1;
+let db;
 
-const dataCache = new Map();
-
-window.onload = function () {
-    usageDisplay();
-    fetchData()
-    $('header').hide();
-};
-
-function initializeCache() {
-    // Load cached data from local storage
-    for (let key in localStorage) {
-        if (key.startsWith(CACHE_PREFIX)) {
-            const cacheKey = key.substring(CACHE_PREFIX.length);
-            const cacheData = JSON.parse(localStorage.getItem(key));
-            if (cacheData && Date.now() - cacheData.timestamp < CACHE_EXPIRATION) {
-                dataCache.set(cacheKey, cacheData.data);
-            } else {
-                // Remove expired cache data
-                localStorage.removeItem(key);
-            }
-        }
-    }
+async function openDB() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+        request.onerror = event => reject(event.target.error);
+        request.onsuccess = event => resolve(event.target.result);
+        request.onupgradeneeded = event => {
+            const db = event.target.result;
+            db.createObjectStore("gameDataCache", { keyPath: "cacheKey" });
+        };
+    });
 }
 
-function saveToCache(cacheKey, data) {
-    dataCache.set(cacheKey, data);
-    const cacheData = { data, timestamp: Date.now() };
-    localStorage.setItem(CACHE_PREFIX + cacheKey, JSON.stringify(cacheData));
+async function saveToCache(cacheKey, data) {
+    const transaction = db.transaction(["gameDataCache"], "readwrite");
+    const store = transaction.objectStore("gameDataCache");
+    const cacheData = { cacheKey, data, timestamp: Date.now() };
+    store.put(cacheData);
+    await transaction.complete;
 }
 
-async function fetchDataWithCaching(endpoint, cacheKey) {
-    if (dataCache.has(cacheKey)) {
-        return dataCache.get(cacheKey);
+async function fetchFromCache(cacheKey) {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(["gameDataCache"], "readonly");
+        const store = transaction.objectStore("gameDataCache");
+        const request = store.get(cacheKey);
+        request.onsuccess = event => resolve(event.target.result);
+        request.onerror = event => reject(event.target.error);
+    });
+}
+
+async function fetchData(endpoint, cacheKey) {
+    const cachedData = await fetchFromCache(cacheKey);
+    if (cachedData && Date.now() - cachedData.timestamp < CACHE_EXPIRATION) {
+        return cachedData.data;
     }
 
-    var aTag = document.querySelector("#myProgressText .tit-credits a");
-    aTag.textContent = "Updating... (Message nouhi#0439 if you're stuck here)";
     const response = await fetch(endpoint);
     const freshData = await response.json();
-    saveToCache(cacheKey, freshData);
+    await saveToCache(cacheKey, freshData);
     return freshData;
 }
 
-async function fetchData() {
-    initializeCache();
-    const table = document.getElementById("table-to-populate");
-    const elem = document.getElementById("myBar");
+window.onload = async function () {
+    usageDisplay();
+    $('header').hide();
+    await fetchDataAndUpdateUI();
+};
 
-    const databaseDataResponse = await fetch(
-        "https://robloxhorrorlist.com/weights-database.json"
-    );
-    data.databaseData = await databaseDataResponse.json();
+async function fetchDataAndUpdateUI() {
+    try {
+        const table = document.getElementById("table-to-populate");
+        const elem = document.getElementById("myBar");
 
-    gameUIDS = [];
+        db = await openDB();
 
-    for (let i = 0; i < data.databaseData.games.length; i++) {
-        const element = data.databaseData.games[i];
-        if (element.ambience !== "") gameUIDS.push(element.uid);
-    }
+        const databaseDataResponse = await fetch("https://robloxhorrorlist.com/weights-database.json");
+        const databaseData = await databaseDataResponse.json();
+        console.log(databaseData);
 
-    const chunks = [];
-    for (let i = 0; i < gameUIDS.length; i += maxUIDChunkSize) {
-        chunks.push(gameUIDS.slice(i, i + maxUIDChunkSize));
-    }
+        const gameUIDS = databaseData.games
+            .filter(element => element.ambience !== "")
+            .map(element => element.uid);
 
-    const fetchGameDataPromises = chunks.map((chunk) =>
-        fetchDataWithCaching(`${API_BASE_URL}/game-info/${chunk.join(",")}`, `gameData_${chunk.join(",")}`, 300000)
-    );
+        const chunks = [];
+        for (let i = 0; i < gameUIDS.length; i += maxUIDChunkSize) {
+            chunks.push(gameUIDS.slice(i, i + maxUIDChunkSize));
+        }
 
-    const fetchIconDataPromises = chunks.map((chunk) =>
-        fetchDataWithCaching(`${API_BASE_URL}/game-icon/${chunk.join(",")}`, `gameIconData_${chunk.join(",")}`, 300000)
-    );
+        const fetchGameDataPromises = chunks.map(chunk =>
+            fetchData(`${API_BASE_URL}/game-info/${chunk.join(",")}`, `gameData_${chunk.join(",")}`)
+        );
 
-    elem.style.width = "50%";
+        const fetchIconDataPromises = chunks.map(chunk =>
+            fetchData(`${API_BASE_URL}/game-icon/${chunk.join(",")}`, `gameIconData_${chunk.join(",")}`)
+        );
 
-    console.time("Get all Promises");
-    const [gameDataResponses, iconDataResponses] = await Promise.all([
-        Promise.all(fetchGameDataPromises),
-        Promise.all(fetchIconDataPromises),
-    ]);
+        const [gameDataResponses, iconDataResponses] = await Promise.all([
+            Promise.all(fetchGameDataPromises),
+            Promise.all(fetchIconDataPromises),
+        ]);
 
-    data.gameData = gameDataResponses.flat();
-    data.gameIconData = iconDataResponses.flat();
+        const gameDataFromAPI = gameDataResponses.flat()
+            .map(item => item.data)
+            .flat();
 
-    const gameDataFromAPI = data.gameData.reduce((result, item) => {
-        return [...result, ...item["data"]];
-    }, []);
+        const gameIconDataFromAPI = iconDataResponses.flat()
+            .map(item => item.data)
+            .flat();
 
-    const gameIconDataFromAPI = data.gameIconData.reduce((result, item) => {
-        return [...result, ...item["data"]];
-    }, []);
-
+        
     const fragment = document.createDocumentFragment();
 
     for (let i = 0; i < gameUIDS.length; i++) {
@@ -129,7 +130,7 @@ async function fetchData() {
                   <td data-th="Creator" class="align-left">${JSON.parse(
                 JSON.stringify(gameDataFromAPI[i].creator)
             ).name}</td>
-                  <td data-th="Rating" class="align-left">${data.databaseData.games[i].ratings.rating}</td>
+                  <td data-th="Rating" class="align-left">${databaseData.games[i].ratings.rating}</td>
                   </tr>`;
 
             const rowElement = document.createElement('tr');
@@ -159,7 +160,63 @@ async function fetchData() {
     if (elementToRemove) {
         elementToRemove.parentNode.removeChild(elementToRemove);
     }
+    } catch (error) {
+        console.error("An error occurred:", error);
+    }
+
 }
+
+
+// async function fetchData() {
+//     initializeCache();
+//     const table = document.getElementById("table-to-populate");
+//     const elem = document.getElementById("myBar");
+
+//     const databaseDataResponse = await fetch(
+//         "https://robloxhorrorlist.com/weights-database.json"
+//     );
+//     data.databaseData = await databaseDataResponse.json();
+
+//     gameUIDS = [];
+
+//     for (let i = 0; i < data.databaseData.games.length; i++) {
+//         const element = data.databaseData.games[i];
+//         if (element.ambience !== "") gameUIDS.push(element.uid);
+//     }
+
+//     const chunks = [];
+//     for (let i = 0; i < gameUIDS.length; i += maxUIDChunkSize) {
+//         chunks.push(gameUIDS.slice(i, i + maxUIDChunkSize));
+//     }
+
+//     const fetchGameDataPromises = chunks.map((chunk) =>
+//         fetchDataWithCaching(`${API_BASE_URL}/game-info/${chunk.join(",")}`, `gameData_${chunk.join(",")}`, 300000)
+//     );
+
+//     const fetchIconDataPromises = chunks.map((chunk) =>
+//         fetchDataWithCaching(`${API_BASE_URL}/game-icon/${chunk.join(",")}`, `gameIconData_${chunk.join(",")}`, 300000)
+//     );
+
+//     elem.style.width = "50%";
+
+//     console.time("Get all Promises");
+//     const [gameDataResponses, iconDataResponses] = await Promise.all([
+//         Promise.all(fetchGameDataPromises),
+//         Promise.all(fetchIconDataPromises),
+//     ]);
+
+//     data.gameData = gameDataResponses.flat();
+//     data.gameIconData = iconDataResponses.flat();
+
+//     const gameDataFromAPI = data.gameData.reduce((result, item) => {
+//         return [...result, ...item["data"]];
+//     }, []);
+
+//     const gameIconDataFromAPI = data.gameIconData.reduce((result, item) => {
+//         return [...result, ...item["data"]];
+//     }, []);
+
+// }
 
 async function usageDisplay() {
     console.log(`                                                                                         
