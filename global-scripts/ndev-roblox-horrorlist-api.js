@@ -130,11 +130,11 @@ async function fetchDataAndUpdateUI() {
 
     for (let i = 0; i < gameUIDS.length; i++) {
         try {
-            let differenceToAverageRating = Math.abs((parseFloat(databaseData.games[i].ratings.rating)-averageRating).toFixed(1));
+            let differenceToAverageRating = Math.abs((parseFloat(databaseData.games[i].ratings.rating)-averageRating)).toFixed(1);
             let spanHTML = "";
             if (differenceToAverageRating < 0) spanHTML = `<span style="color: red; font-size: 10px;">-${differenceToAverageRating}↓</span> `;
             else spanHTML = `<span style="color: green; font-size: 10px;">${differenceToAverageRating}↑</span> `;
-            if (differenceToAverageRating == 0) spanHTML = `<span style="color: gray; font-size: 10px;">${differenceToAverageRating}.0-</span> `;
+            if (differenceToAverageRating == 0) spanHTML = `<span style="color: gray; font-size: 10px;">${differenceToAverageRating}-</span> `;
 
             var row = ` <tr class="hover-reveal">
                   <td data-th="Placement">${i + 1}.</td>
