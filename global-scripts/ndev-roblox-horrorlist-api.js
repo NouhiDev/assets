@@ -116,10 +116,26 @@ async function fetchDataAndUpdateUI() {
             .flat();
 
         
+            let totalRatings = 0;
+            const numGames = databaseData.games.length;
+            
+            for (const game of databaseData.games) {
+              const rating = parseFloat(game.ratings.rating);
+              totalRatings += rating;
+            }
+            
+            const averageRating = totalRatings / numGames;
+
     const fragment = document.createDocumentFragment();
 
     for (let i = 0; i < gameUIDS.length; i++) {
         try {
+            let differenceToAverageRating = (parseFloat(databaseData.games[i].ratings.rating)-averageRating).toFixed(1);
+            let spanHTML = "";
+            if (differenceToAverageRating < 0) spanHTML = `<span style="color: red; font-size: 10px;">${differenceToAverageRating}↓</span> `;
+            else spanHTML = `<span style="color: green; font-size: 10px;">${differenceToAverageRating}↑</span> `;
+            if (differenceToAverageRating == 0) spanHTML = `<span style="color: gray; font-size: 10px;">${differenceToAverageRating}-</span> `;
+
             var row = ` <tr class="hover-reveal">
                   <td data-th="Placement">${i + 1}.</td>
                   <td data="Icon"><img class="game-icon" src="${gameIconDataFromAPI[i].imageUrl}"></td>
@@ -129,7 +145,7 @@ async function fetchDataAndUpdateUI() {
                   <td data-th="Creator" class="align-left">${JSON.parse(
                 JSON.stringify(gameDataFromAPI[i].creator)
             ).name}</td>
-                  <td data-th="Rating" class="align-left">${databaseData.games[i].ratings.rating}</td>
+                  <td data-th="Rating" class="align-left">${databaseData.games[i].ratings.rating}  ${spanHTML}</td>
                   </tr>`;
 
             const rowElement = document.createElement('tr');
