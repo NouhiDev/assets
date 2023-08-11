@@ -156,6 +156,19 @@ async function fetchDataAndUpdateUI() {
             }
         }
         table.appendChild(fragment);
+        
+    elem.style.width = "100%";
+
+    await delay(500);
+
+    $('header').show();
+    document.getElementById("myProgress").style.display = "none";
+
+    // Generate Table after populating it
+    $("#game-table").DataTable({
+        columnDefs: [{ orderable: false, targets: [1, 3] }],
+        responsive: true
+    });
     }
     else {
         
@@ -187,8 +200,7 @@ async function fetchDataAndUpdateUI() {
         }
     }
     table.appendChild(fragment);
-    }
-
+    
     elem.style.width = "100%";
 
     await delay(500);
@@ -201,6 +213,7 @@ async function fetchDataAndUpdateUI() {
         columnDefs: [{ orderable: false, targets: [1, 4] }],
         responsive: true
     });
+    }
 
     document.getElementsByTagName("footer")[0].style.bottom = "auto";
 
