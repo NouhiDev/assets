@@ -167,6 +167,7 @@ async function fetchDataAndUpdateUI() {
     // Generate Table after populating it
     $("#game-table").DataTable({
         columnDefs: [{ orderable: false, targets: [1, 4] }],
+        responsive: true
     });
 
     document.getElementsByTagName("footer")[0].style.bottom = "auto";
