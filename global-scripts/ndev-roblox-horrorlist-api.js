@@ -132,7 +132,7 @@ async function fetchDataAndUpdateUI() {
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     if (isMobile) {
         document.getElementsByClassName("mobile-table-container")[0].style.display = "block";
-        table.style.display = "none";
+        document.getElementsByClassName("table-container")[0].style.display = "none";
         for (let i = 0; i < gameUIDS.length; i++) {
             try {
                 let differenceToAverageRating = Math.abs((parseFloat(databaseData.games[i].ratings.rating)-averageRating)).toFixed(1);
