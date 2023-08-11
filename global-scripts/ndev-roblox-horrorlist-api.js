@@ -131,7 +131,7 @@ async function fetchDataAndUpdateUI() {
 
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     if (isMobile) {
-        mobileTable.style.display = "block";
+        document.getElementsByClassName("mobile-table-container")[0].style.display = "block";
         table.style.display = "none";
         for (let i = 0; i < gameUIDS.length; i++) {
             try {
