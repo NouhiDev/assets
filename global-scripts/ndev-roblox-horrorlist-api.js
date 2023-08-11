@@ -78,6 +78,7 @@ window.onload = async function () {
 async function fetchDataAndUpdateUI() {
     try {
         const table = document.getElementById("table-to-populate");
+        const mobileTable = document.getElementById("mobile-table-to-populate");
         const elem = document.getElementById("myBar");
 
         db = await openDB();
@@ -155,7 +156,7 @@ async function fetchDataAndUpdateUI() {
                 console.error(e);
             }
         }
-        table.appendChild(fragment);
+        mobileTable.appendChild(fragment);
         
     elem.style.width = "100%";
 
@@ -171,48 +172,48 @@ async function fetchDataAndUpdateUI() {
     });
     }
     else {
-        
-    for (let i = 0; i < gameUIDS.length; i++) {
-        try {
-            let differenceToAverageRating = Math.abs((parseFloat(databaseData.games[i].ratings.rating)-averageRating)).toFixed(1);
-            let spanHTML = "";
-            if (differenceToAverageRating < 0) spanHTML = `<span style="color: red; font-size: 10px;">-${differenceToAverageRating}↓</span> `;
-            else spanHTML = `<span style="color: green; font-size: 10px;">${differenceToAverageRating}↑</span> `;
-            if (differenceToAverageRating == 0) spanHTML = `<span style="color: gray; font-size: 10px;">${differenceToAverageRating}-</span> `;
+            
+        for (let i = 0; i < gameUIDS.length; i++) {
+            try {
+                let differenceToAverageRating = Math.abs((parseFloat(databaseData.games[i].ratings.rating)-averageRating)).toFixed(1);
+                let spanHTML = "";
+                if (differenceToAverageRating < 0) spanHTML = `<span style="color: red; font-size: 10px;">-${differenceToAverageRating}↓</span> `;
+                else spanHTML = `<span style="color: green; font-size: 10px;">${differenceToAverageRating}↑</span> `;
+                if (differenceToAverageRating == 0) spanHTML = `<span style="color: gray; font-size: 10px;">${differenceToAverageRating}-</span> `;
 
-            var row = ` <tr class="hover-reveal">
-                  <td data-th="Placement">${i + 1}.</td>
-                  <td data="Icon"><img class="game-icon" src="${gameIconDataFromAPI[i].imageUrl}"></td>
-                  <td data-th="Title" class="game-title"><a href="#" class="game-href" onclick="loadGame(
-                    ${i + 1}, 
-                    ${gameUIDS[i]})">${gameDataFromAPI[i].name}</a></td>
-                  <td data-th="Creator" class="align-left">${JSON.parse(
-                JSON.stringify(gameDataFromAPI[i].creator)
-            ).name}</td>
-                  <td data-th="Rating" class="align-left">${databaseData.games[i].ratings.rating}  ${spanHTML}</td>
-                  </tr>`;
+                var row = ` <tr class="hover-reveal">
+                    <td data-th="Placement">${i + 1}.</td>
+                    <td data="Icon"><img class="game-icon" src="${gameIconDataFromAPI[i].imageUrl}"></td>
+                    <td data-th="Title" class="game-title"><a href="#" class="game-href" onclick="loadGame(
+                        ${i + 1}, 
+                        ${gameUIDS[i]})">${gameDataFromAPI[i].name}</a></td>
+                    <td data-th="Creator" class="align-left">${JSON.parse(
+                    JSON.stringify(gameDataFromAPI[i].creator)
+                ).name}</td>
+                    <td data-th="Rating" class="align-left">${databaseData.games[i].ratings.rating}  ${spanHTML}</td>
+                    </tr>`;
 
-            const rowElement = document.createElement('tr');
-            rowElement.innerHTML = row;
-            fragment.appendChild(rowElement);
-        } catch (e) {
-            console.error(e);
+                const rowElement = document.createElement('tr');
+                rowElement.innerHTML = row;
+                fragment.appendChild(rowElement);
+            } catch (e) {
+                console.error(e);
+            }
         }
-    }
-    table.appendChild(fragment);
-    
-    elem.style.width = "100%";
+        table.appendChild(fragment);
+        
+        elem.style.width = "100%";
 
-    await delay(500);
+        await delay(500);
 
-    $('header').show();
-    document.getElementById("myProgress").style.display = "none";
+        $('header').show();
+        document.getElementById("myProgress").style.display = "none";
 
-    // Generate Table after populating it
-    $("#game-table").DataTable({
-        columnDefs: [{ orderable: false, targets: [1, 4] }],
-        responsive: true
-    });
+        // Generate Table after populating it
+        $("#game-table").DataTable({
+            columnDefs: [{ orderable: false, targets: [1, 4] }],
+            responsive: true
+        });
     }
 
     document.getElementsByTagName("footer")[0].style.bottom = "auto";
