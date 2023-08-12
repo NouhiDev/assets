@@ -116,32 +116,32 @@ async function fetchDataAndUpdateUI() {
             .map(item => item.data)
             .flat();
 
-        
-            let totalRatings = 0;
-            const numGames = databaseData.games.length;
-            
-            for (const game of databaseData.games) {
-              const rating = parseFloat(game.ratings.rating);
-              totalRatings += rating;
-            }
-            
-            const averageRating = totalRatings / numGames;
 
-    const fragment = document.createDocumentFragment();
+        let totalRatings = 0;
+        const numGames = databaseData.games.length;
 
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    if (isMobile) {
-        document.getElementsByClassName("mobile-table-container")[0].style.display = "block";
-        document.getElementsByClassName("table-container")[0].style.display = "none";
-        for (let i = 0; i < gameUIDS.length; i++) {
-            try {
-                let differenceToAverageRating = Math.abs((parseFloat(databaseData.games[i].ratings.rating)-averageRating)).toFixed(1);
-                let spanHTML = "";
-                if (differenceToAverageRating < 0) spanHTML = `<span style="color: red; font-size: 10px;">-${differenceToAverageRating}↓</span> `;
-                else spanHTML = `<span style="color: green; font-size: 10px;">${differenceToAverageRating}↑</span> `;
-                if (differenceToAverageRating == 0) spanHTML = `<span style="color: gray; font-size: 10px;">${differenceToAverageRating}-</span> `;
-    
-                var row = ` <tr class="hover-reveal">
+        for (const game of databaseData.games) {
+            const rating = parseFloat(game.ratings.rating);
+            totalRatings += rating;
+        }
+
+        const averageRating = totalRatings / numGames;
+
+        const fragment = document.createDocumentFragment();
+
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        if (isMobile) {
+            document.getElementsByClassName("mobile-table-container")[0].style.display = "block";
+            document.getElementsByClassName("table-container")[0].style.display = "none";
+            for (let i = 0; i < gameUIDS.length; i++) {
+                try {
+                    let differenceToAverageRating = Math.abs((parseFloat(databaseData.games[i].ratings.rating) - averageRating)).toFixed(1);
+                    let spanHTML = "";
+                    if (differenceToAverageRating < 0) spanHTML = `<span style="color: red; font-size: 10px;">-${differenceToAverageRating}↓</span> `;
+                    else spanHTML = `<span style="color: green; font-size: 10px;">${differenceToAverageRating}↑</span> `;
+                    if (differenceToAverageRating == 0) spanHTML = `<span style="color: gray; font-size: 10px;">${differenceToAverageRating}-</span> `;
+
+                    var row = ` <tr class="hover-reveal">
                       <td data-th="Placement">${i + 1}.</td>
                       <td data="Icon"><img class="game-icon" src="${gameIconDataFromAPI[i].imageUrl}"></td>
                       <td data-th="Title" class="game-title"><a href="#" class="game-href" onclick="loadGame(
@@ -149,80 +149,93 @@ async function fetchDataAndUpdateUI() {
                         ${gameUIDS[i]})">${gameDataFromAPI[i].name}</a></td>
                       <td data-th="Rating" class="align-left">${databaseData.games[i].ratings.rating}  ${spanHTML}</td>
                       </tr>`;
-    
-                const rowElement = document.createElement('tr');
-                rowElement.innerHTML = row;
-                fragment.appendChild(rowElement);
-            } catch (e) {
-                console.error(e);
+
+                    const rowElement = document.createElement('tr');
+                    rowElement.innerHTML = row;
+                    fragment.appendChild(rowElement);
+                } catch (e) {
+                    console.error(e);
+                }
             }
+            mobileTable.appendChild(fragment);
+
+            elem.style.width = "100%";
+
+            await delay(500);
+
+            $('header').show();
+            document.getElementById("myProgress").style.display = "none";
+
+            // Generate Table after populating it
+            $("#game-table").DataTable({
+                columnDefs: [{ orderable: false, targets: [1, 3] }],
+                responsive: true
+            });
         }
-        mobileTable.appendChild(fragment);
-        
-    elem.style.width = "100%";
+        else {
 
-    await delay(500);
+            for (let i = 0; i < gameUIDS.length; i++) {
+                try {
+                    let differenceToAverageRating = Math.abs((parseFloat(databaseData.games[i].ratings.rating) - averageRating)).toFixed(1);
+                    let spanHTML = "";
+                    if (differenceToAverageRating < 0) spanHTML = `<span style="color: red; font-size: 10px;">-${differenceToAverageRating}↓</span> `;
+                    else spanHTML = `<span style="color: green; font-size: 10px;">${differenceToAverageRating}↑</span> `;
+                    if (differenceToAverageRating == 0) spanHTML = `<span style="color: gray; font-size: 10px;">${differenceToAverageRating}-</span> `;
 
-    $('header').show();
-    document.getElementById("myProgress").style.display = "none";
-
-    // Generate Table after populating it
-    $("#game-table").DataTable({
-        columnDefs: [{ orderable: false, targets: [1, 3] }],
-        responsive: true
-    });
-    }
-    else {
-            
-        for (let i = 0; i < gameUIDS.length; i++) {
-            try {
-                let differenceToAverageRating = Math.abs((parseFloat(databaseData.games[i].ratings.rating)-averageRating)).toFixed(1);
-                let spanHTML = "";
-                if (differenceToAverageRating < 0) spanHTML = `<span style="color: red; font-size: 10px;">-${differenceToAverageRating}↓</span> `;
-                else spanHTML = `<span style="color: green; font-size: 10px;">${differenceToAverageRating}↑</span> `;
-                if (differenceToAverageRating == 0) spanHTML = `<span style="color: gray; font-size: 10px;">${differenceToAverageRating}-</span> `;
-
-                var row = ` <tr class="hover-reveal">
+                    var row = ` <tr class="hover-reveal">
                     <td data-th="Placement">${i + 1}.</td>
                     <td data="Icon"><img class="game-icon" src="${gameIconDataFromAPI[i].imageUrl}"></td>
                     <td data-th="Title" class="game-title"><a href="#" class="game-href" onclick="loadGame(
                         ${i + 1}, 
                         ${gameUIDS[i]})">${gameDataFromAPI[i].name}</a></td>
                     <td data-th="Creator" class="align-left">${JSON.parse(
-                    JSON.stringify(gameDataFromAPI[i].creator)
-                ).name}</td>
+                        JSON.stringify(gameDataFromAPI[i].creator)
+                    ).name}</td>
                     <td data-th="Rating" class="align-left">${databaseData.games[i].ratings.rating}  ${spanHTML}</td>
                     </tr>`;
 
-                const rowElement = document.createElement('tr');
-                rowElement.innerHTML = row;
-                fragment.appendChild(rowElement);
-            } catch (e) {
-                console.error(e);
+                    const rowElement = document.createElement('tr');
+                    rowElement.innerHTML = row;
+                    fragment.appendChild(rowElement);
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+            table.appendChild(fragment);
+
+            elem.style.width = "100%";
+
+            await delay(500);
+
+            $('header').show();
+            document.getElementById("myProgress").style.display = "none";
+
+            // Generate Table after populating it
+            $("#game-table").DataTable({
+                columnDefs: [{ orderable: false, targets: [1, 4] }],
+                responsive: true
+            });
+
+            var htmlToAdd = `
+        <button class="filter-button" onclick="filtered()">
+            <i class="fas fa-filter"></i> Filter
+        </button>
+    `;
+
+            var gameTableFilter = document.getElementById("game-table_filter");
+            if (gameTableFilter) {
+                gameTableFilter.innerHTML += htmlToAdd;
+            } else {
+                console.error("Element with id 'game-table_filter' not found.");
             }
         }
-        table.appendChild(fragment);
-        
-        elem.style.width = "100%";
 
-        await delay(500);
+        document.getElementsByTagName("footer")[0].style.bottom = "auto";
 
-        $('header').show();
-        document.getElementById("myProgress").style.display = "none";
-
-        // Generate Table after populating it
-        $("#game-table").DataTable({
-            columnDefs: [{ orderable: false, targets: [1, 4] }],
-            responsive: true
-        });
-    }
-
-    document.getElementsByTagName("footer")[0].style.bottom = "auto";
-
-    const elementToRemove = document.getElementById("myProgressText");
-    if (elementToRemove) {
-        elementToRemove.parentNode.removeChild(elementToRemove);
-    }
+        const elementToRemove = document.getElementById("myProgressText");
+        if (elementToRemove) {
+            elementToRemove.parentNode.removeChild(elementToRemove);
+        }
     } catch (error) {
         console.error("An error occurred:", error);
     }
