@@ -85,7 +85,7 @@ async function fetchDataAndUpdateUI() {
 
         const databaseDataResponse = await fetch("https://ndevapi.com/main_list_ratings");
         const databaseData = await databaseDataResponse.json();
-        databaseData = databaseData.sorted(data, key=lambda x: float(x['ratings']['rating']), reverse=True);
+        databaseData = databaseData.sort((a, b) => parseFloat(b.ratings.rating) - parseFloat(a.ratings.rating));
 
 
         const gameUIDS = databaseData
