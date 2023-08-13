@@ -216,18 +216,18 @@ async function fetchDataAndUpdateUI() {
                 responsive: true
             });
 
-            var htmlToAdd = `
-        <button class="filter-button" onclick="filtered()">
-            <i class="fas fa-filter"></i> Filter
-        </button>
-    `;
+            // var htmlToAdd = `
+            //     <button class="filter-button" onclick="filtered()">
+            //         <i class="fas fa-filter"></i> Filter
+            //     </button>
+            //     `;
 
-            var gameTableFilter = document.getElementById("game-table_filter");
-            if (gameTableFilter) {
-                gameTableFilter.innerHTML += htmlToAdd;
-            } else {
-                console.error("Element with id 'game-table_filter' not found.");
-            }
+            // var gameTableFilter = document.getElementById("game-table_filter");
+            // if (gameTableFilter) {
+            //     gameTableFilter.innerHTML += htmlToAdd;
+            // } else {
+            //     console.error("Element with id 'game-table_filter' not found.");
+            // }
         }
 
         document.getElementsByTagName("footer")[0].style.bottom = "auto";
@@ -241,58 +241,6 @@ async function fetchDataAndUpdateUI() {
     }
 
 }
-
-
-// async function fetchData() {
-//     initializeCache();
-//     const table = document.getElementById("table-to-populate");
-//     const elem = document.getElementById("myBar");
-
-//     const databaseDataResponse = await fetch(
-//         "https://robloxhorrorlist.com/weights-database.json"
-//     );
-//     data.databaseData = await databaseDataResponse.json();
-
-//     gameUIDS = [];
-
-//     for (let i = 0; i < data.databaseData.games.length; i++) {
-//         const element = data.databaseData.games[i];
-//         if (element.ambience !== "") gameUIDS.push(element.uid);
-//     }
-
-//     const chunks = [];
-//     for (let i = 0; i < gameUIDS.length; i += maxUIDChunkSize) {
-//         chunks.push(gameUIDS.slice(i, i + maxUIDChunkSize));
-//     }
-
-//     const fetchGameDataPromises = chunks.map((chunk) =>
-//         fetchDataWithCaching(`${API_BASE_URL}/game-info/${chunk.join(",")}`, `gameData_${chunk.join(",")}`, 300000)
-//     );
-
-//     const fetchIconDataPromises = chunks.map((chunk) =>
-//         fetchDataWithCaching(`${API_BASE_URL}/game-icon/${chunk.join(",")}`, `gameIconData_${chunk.join(",")}`, 300000)
-//     );
-
-//     elem.style.width = "50%";
-
-//     console.time("Get all Promises");
-//     const [gameDataResponses, iconDataResponses] = await Promise.all([
-//         Promise.all(fetchGameDataPromises),
-//         Promise.all(fetchIconDataPromises),
-//     ]);
-
-//     data.gameData = gameDataResponses.flat();
-//     data.gameIconData = iconDataResponses.flat();
-
-//     const gameDataFromAPI = data.gameData.reduce((result, item) => {
-//         return [...result, ...item["data"]];
-//     }, []);
-
-//     const gameIconDataFromAPI = data.gameIconData.reduce((result, item) => {
-//         return [...result, ...item["data"]];
-//     }, []);
-
-// }
 
 async function usageDisplay() {
     console.log(`                                                                                         
