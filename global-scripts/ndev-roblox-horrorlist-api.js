@@ -128,6 +128,7 @@ async function fetchDataAndUpdateUI() {
         }
 
         const averageRating = totalRatings / numGames;
+        console.log(averageRating);
 
         const fragment = document.createDocumentFragment();
 
