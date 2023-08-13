@@ -83,10 +83,10 @@ async function fetchDataAndUpdateUI() {
 
         db = await openDB();
 
-        const databaseDataResponse = await fetch("https://robloxhorrorlist.com/weights-database.json");
+        const databaseDataResponse = await fetch("https://ndevapi.com/main_list_ratings");
         const databaseData = await databaseDataResponse.json();
 
-        const gameUIDS = databaseData.games
+        const gameUIDS = databaseData
             .filter(element => element.ambience !== "")
             .map(element => element.uid);
 
@@ -118,9 +118,9 @@ async function fetchDataAndUpdateUI() {
 
 
         let totalRatings = 0;
-        const numGames = databaseData.games.length;
+        const numGames = databaseData.length;
 
-        for (const game of databaseData.games) {
+        for (const game of databaseData) {
             const rating = parseFloat(game.ratings.rating);
             totalRatings += rating;
         }
@@ -135,7 +135,7 @@ async function fetchDataAndUpdateUI() {
             document.getElementsByClassName("table-container")[0].style.display = "none";
             for (let i = 0; i < gameUIDS.length; i++) {
                 try {
-                    let differenceToAverageRating = Math.abs((parseFloat(databaseData.games[i].ratings.rating) - averageRating)).toFixed(1);
+                    let differenceToAverageRating = Math.abs((parseFloat(databaseData[i].ratings.rating) - averageRating)).toFixed(1);
                     let spanHTML = "";
                     if (differenceToAverageRating < 0) spanHTML = `<span style="color: red; font-size: 10px;">-${differenceToAverageRating}↓</span> `;
                     else spanHTML = `<span style="color: green; font-size: 10px;">${differenceToAverageRating}↑</span> `;
@@ -147,7 +147,7 @@ async function fetchDataAndUpdateUI() {
                       <td data-th="Title" class="game-title"><a href="#" class="game-href" onclick="loadGame(
                         ${i + 1}, 
                         ${gameUIDS[i]})">${gameDataFromAPI[i].name}</a></td>
-                      <td data-th="Rating" class="align-left">${databaseData.games[i].ratings.rating}  ${spanHTML}</td>
+                      <td data-th="Rating" class="align-left">${databaseData[i].ratings.rating}  ${spanHTML}</td>
                       </tr>`;
 
                     const rowElement = document.createElement('tr');
@@ -176,7 +176,7 @@ async function fetchDataAndUpdateUI() {
 
             for (let i = 0; i < gameUIDS.length; i++) {
                 try {
-                    let differenceToAverageRating = Math.abs((parseFloat(databaseData.games[i].ratings.rating) - averageRating)).toFixed(1);
+                    let differenceToAverageRating = Math.abs((parseFloat(databaseData[i].ratings.rating) - averageRating)).toFixed(1);
                     let spanHTML = "";
                     if (differenceToAverageRating < 0) spanHTML = `<span style="color: red; font-size: 10px;">-${differenceToAverageRating}↓</span> `;
                     else spanHTML = `<span style="color: green; font-size: 10px;">${differenceToAverageRating}↑</span> `;
@@ -191,7 +191,7 @@ async function fetchDataAndUpdateUI() {
                     <td data-th="Creator" class="align-left">${JSON.parse(
                         JSON.stringify(gameDataFromAPI[i].creator)
                     ).name}</td>
-                    <td data-th="Rating" class="align-left">${databaseData.games[i].ratings.rating}  ${spanHTML}</td>
+                    <td data-th="Rating" class="align-left">${databaseData[i].ratings.rating}  ${spanHTML}</td>
                     </tr>`;
 
                     const rowElement = document.createElement('tr');
@@ -215,19 +215,6 @@ async function fetchDataAndUpdateUI() {
                 columnDefs: [{ orderable: false, targets: [1, 4] }],
                 responsive: true
             });
-
-            // var htmlToAdd = `
-            //     <button class="filter-button" onclick="filtered()">
-            //         <i class="fas fa-filter"></i> Filter
-            //     </button>
-            //     `;
-
-            // var gameTableFilter = document.getElementById("game-table_filter");
-            // if (gameTableFilter) {
-            //     gameTableFilter.innerHTML += htmlToAdd;
-            // } else {
-            //     console.error("Element with id 'game-table_filter' not found.");
-            // }
         }
 
         document.getElementsByTagName("footer")[0].style.bottom = "auto";
