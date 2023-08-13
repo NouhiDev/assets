@@ -268,7 +268,7 @@ async function usageDisplay() {
     Learn more at
     
     https://nouhi.dev/ndev-assets-docs/.
-      `);
+      `); 
 }
 
 function delay(time) {
